@@ -12,15 +12,16 @@ class BaseModel(models.Model):
 
 
 class User(AbstractUser):
-    mobile = models.SmallIntegerField(max_length=10,
-                                      help_text="Example: 9123456789",
-                                      unique=True, null=False, blank=False)
-    telephone = models.SmallIntegerField(help_text="Enter without your city code", max_length=11, null=True, blank=True)
-    national_id = models.CharField(max_length=10, null=True, blank=True)
-    age = models.SmallIntegerField(max_length=3, null=True, blank=True)
+    mobile = models.SmallIntegerField("Mobile", help_text="Example: 9123456789", unique=True, null=False, blank=False)
+    telephone = models.SmallIntegerField(help_text="Enter without your city code", null=True, blank=True)
+    national_id = models.CharField("National ID", max_length=10, null=True, blank=True)
+    age = models.SmallIntegerField("Age", null=True, blank=True)
 
     GENDER_CHOICES = (
         ("F", "Femail"),
         ("M", "Mail")
     )
-    gender = models.CharField(choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
+    gender = models.CharField("Gender", choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
+
+    class Meta:
+        verbose_name = "User"
