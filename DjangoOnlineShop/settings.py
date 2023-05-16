@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 
 from pathlib import Path
 
+import os
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -120,3 +122,40 @@ STATIC_URL = 'static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 AUTH_USER_MODEL = "Core.User"
+
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    "formatters": {
+        "verbose": {
+            "format": "{level name} {asc time} {module} {process:d} {thread:d} {message}",
+            "style": "{",
+        },
+    },
+    'handlers': {
+        'file_info': {
+            'level': 'INFO',
+            'class': 'logging.FileHandler',
+            "formatter": "verbose",
+            'filename': BASE_DIR / 'info.log',
+        },
+        'file_warning': {
+            'level': 'WARNING',
+            'class': 'logging.FileHandler',
+            "formatter": "verbose",
+            'filename': BASE_DIR / 'warning.log',
+        },
+    },
+    'loggers': {
+        'info logger': {
+            'handlers': ['file_info'],
+            'level': 'INFO',
+            'propagate': True,
+        },
+        'warning logger': {
+            'handlers': ['file_warning'],
+            'level': 'WARNING',
+            'propagate': True,
+        },
+    },
+}
