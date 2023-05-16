@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.test import TestCase
+from django.contrib.auth.hashers import check_password
 
 
 class UsersTest(TestCase):
@@ -15,9 +16,7 @@ class UsersTest(TestCase):
                                                                    password="test")
 
     def test_create_user(self):
-        self.assertEqual(self.user.password, self.user.password)
-        # How to get the encrypted password
-
+        self.assertTrue(self.user.password, check_password("test", self.user.password))
         self.assertEqual(self.user.username, "test_user_name")
         self.assertEqual(self.user.first_name, "test_first_name")
         self.assertEqual(self.user.last_name, "test_last_name")
