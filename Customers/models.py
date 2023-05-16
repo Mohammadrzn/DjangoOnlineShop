@@ -17,3 +17,9 @@ class Address(models.Model):
     city = models.CharField("City", max_length=100, null=False, blank=False)
     full_address = models.TextField("Full Address", null=False, blank=False)
     postal_code = models.SmallIntegerField("Postal Code", null=False, blank=False)
+
+    class Meta:
+        verbose_name = "Address"
+
+    def __str__(self):
+        return f"{self.customer_id}"
