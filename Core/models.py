@@ -12,7 +12,8 @@ class BaseModel(models.Model):
 
 
 class User(AbstractUser):
-    mobile = models.SmallIntegerField("Mobile", help_text="Example: 9123456789", unique=True, null=False, blank=False)
+    # mobile = models.SmallIntegerField("Mobile", help_text="Example: 9123456789", unique=True, null=False, blank=False)
+    # When there is a mobile fild in database and null = False, admin can't be created
     telephone = models.SmallIntegerField(help_text="Enter without your city code", null=True, blank=True)
     national_id = models.CharField("National ID", max_length=10, null=True, blank=True)
     age = models.SmallIntegerField("Age", null=True, blank=True)
