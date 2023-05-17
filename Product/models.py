@@ -7,6 +7,7 @@ class Category(BaseModel):
     name = models.CharField("Name", max_length=100, null=False, blank=False)
 
     class Meta:
+        ordering = "name"
         verbose_name_plural = "Categories"
 
     def __str__(self):
@@ -22,6 +23,7 @@ class Product(BaseModel):
     description = models.TextField(null=False, blank=False)
 
     class Meta:
+        ordering = "name"
         verbose_name_plural = "Products"
 
     def __str__(self):
