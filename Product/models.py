@@ -1,3 +1,22 @@
+from Core.models import BaseModel
+from Customers.models import Customer
 from django.db import models
 
-# Create your models here.
+
+class Category(BaseModel):
+    name = models.CharField("Name", max_length=100, null=False, blank=False)
+    price = models.IntegerField("Price", null=False, blank=False)
+    count = models.SmallIntegerField(null=False, blank=False)
+    brand = models.CharField("Brand", max_length=75, null=False, blank=False)
+    description = models.TextField(null=False, blank=False)
+
+
+class Product(BaseModel):
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    name = models.CharField("Name", max_length=100, null=False, blank=False)
+
+
+class Comment(BaseModel):
+    content = models.TextField("Content", null=False, blank=False)
+    user = models.ForeignKey(Customer, on_delete=models.DO_NOTHING)
+    product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
