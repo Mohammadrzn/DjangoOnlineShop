@@ -7,7 +7,7 @@ class Category(BaseModel):
     name = models.CharField("Name", max_length=100, null=False, blank=False)
 
     class Meta:
-        ordering = "name"
+        ordering = ["name"]
         verbose_name_plural = "Categories"
 
     def __str__(self):
@@ -25,7 +25,7 @@ class Product(BaseModel):
     is_sold_out = models.BooleanField("Is sold out", default=False, null=False, blank=False)
 
     class Meta:
-        ordering = "name"
+        ordering = ["name"]
         verbose_name_plural = "Products"
 
     def __str__(self):
