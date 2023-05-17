@@ -7,7 +7,7 @@ class Category(BaseModel):
     name = models.CharField("Name", max_length=100, null=False, blank=False)
 
     class Meta:
-        verbose_name = "Categories"
+        verbose_name_plural = "Categories"
 
     def __str__(self):
         return f"{self.name}"
@@ -22,7 +22,7 @@ class Product(BaseModel):
     description = models.TextField(null=False, blank=False)
 
     class Meta:
-        verbose_name = "Products"
+        verbose_name_plural = "Products"
 
     def __str__(self):
         return f"{self.name}"
@@ -35,7 +35,7 @@ class Comment(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
 
     class Meta:
-        verbose_name = "Comments"
+        verbose_name_plural = "Comments"
 
     def __str__(self):
         return f"{self.title}"
