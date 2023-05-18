@@ -8,7 +8,7 @@ class Customer(User, BaseModel):
         verbose_name_plural = "Customers"
 
     def __str__(self):
-        return f"{self.get_full_name}"
+        return f"{self.first_name} {self.last_name}"
 
 
 class Address(BaseModel):
