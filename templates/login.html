@@ -1,0 +1,40 @@
+{% extends "base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <form>
+        <div class="form-outline mb-4">
+            <input type="email" id="form2Example1" class="form-control"/>
+            <label class="form-label" for="form2Example1">ایمیل</label>
+        </div>
+        <div class="form-outline mb-4">
+            <input type="password" id="form2Example2" class="form-control"/>
+            <label class="form-label" for="form2Example2">رمز</label>
+        </div>
+        <div class="row mb-4">
+            <div class="col d-flex justify-content-center">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked/>
+                    <label class="form-check-label" for="form2Example31"> مرا به یاد داشته باش </label>
+                </div>
+            </div>
+
+            <div class="col">
+                <a href="#">فراموشی رمز</a>
+            </div>
+        </div>
+        <button type="button" class="btn btn-primary btn-block mb-4">ورود</button>
+        <div class="text-center">
+            <p>عضو نیستید؟ <a href="#">ثبت نام</a></p>
+            <p>و یا با استفاده از موارد زیر وارد شوید</p>
+            <button type="button" class="btn btn-link btn-floating mx-1">
+                <i class="fab fa-facebook-f"></i>
+            </button>
+
+            <button type="button" class="btn btn-link btn-floating mx-1">
+                <i class="fab fa-google"></i>
+            </button>
+        </div>
+    </form>
+{% endblock %}
