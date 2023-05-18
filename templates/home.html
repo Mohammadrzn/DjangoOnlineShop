@@ -1,17 +1,19 @@
 {% extends "base.html" %}
 {% block title %}home{% endblock %}
 {% block content %}
-{% for product in products %}
-    <div>
-        <a href="#">
-            <div>
-                {{ product.image }}
+    {% for product in products %}
+        <div>
+            <div class="card col-sm-6" style="width: 18rem;">
+                <a href="{% url "product:detail" product.id %}">
+                    <div>
+                        {{ product.image }}
+                    </div>
+                    <div>
+                        <h2>{{ product.name }}</h2>
+                        <p>قیمت: {{ product.price }} تومان </p>
+                    </div>
+                </a>
             </div>
-            <div>
-                <h2>{{ product.name }}</h2>
-                <p>قیمت: {{ product.price }}</p>
-            </div>
-        </a>
-    </div>
-{% endfor %}
+        </div>
+    {% endfor %}
 {% endblock %}
