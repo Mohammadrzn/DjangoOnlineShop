@@ -1,42 +1,27 @@
 {% extends "base.html" %}
 
+{% block head %}
+
+{% endblock %}
+
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <form>
-        <div class="form-outline mb-4">
-            <input type="email" id="form2Example1" class="form-control"/>
-            <label class="form-label" for="form2Example1">ایمیل</label>
+    <div class="items-center col-span p-6 bg-gray-100 rounded-xl">
+        <form>
+            <label for="username"></label>
+            <input class="rounded-xl" type="text" id="username" name="username" placeholder="نام کاربری" required><i
+                class=""></i>
+            <br><label for="password"></label>
+            <br><input class="rounded-xl" type="password" id="password" name="password" placeholder="رمز" required><i
+                class="validation"></i><br>
+            <br><input class="px-2 bg-sky-500 text-white rounded-xl hover:bg-sky-700" type="submit" id="login"
+                   value="ورود">
+        </form>
+        <div class="py-5" id="create-account-wrap">
+            <p>عضو نیستید؟ <a href="#" class="px-2 py-1 bg-sky-500 text-white rounded-xl hover:bg-sky-700">ثبت نام
+                کنید</a>
+            <p>
         </div>
-        <div class="form-outline mb-4">
-            <input type="password" id="form2Example2" class="form-control"/>
-            <label class="form-label" for="form2Example2">رمز</label>
-        </div>
-        <div class="row mb-4">
-            <div class="col d-flex justify-content-center">
-                <div class="col-md-9 form-check">
-                    <input class="form-check-input" type="checkbox" value="" id="form2Example31" checked/>
-                    <label class="form-check-label" for="form2Example31"> مرا به یاد داشته باش </label>
-                </div>
-            </div>
-
-            <div class="col-5">
-                <a href="#">فراموشی رمز</a>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <button type="button" class="btn btn-primary btn-block mb-4">ورود</button>
-        </div>
-        <div class="text-center">
-            <p>عضو نیستید؟ <a href="#">ثبت نام</a></p>
-            <p>و یا با استفاده از موارد زیر وارد شوید</p>
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-facebook-f"></i>
-            </button>
-
-            <button type="button" class="btn btn-link btn-floating mx-1">
-                <i class="fab fa-google"></i>
-            </button>
-        </div>
-    </form>
+    </div>
 {% endblock %}
