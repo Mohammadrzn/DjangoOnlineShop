@@ -7,6 +7,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href='http://alimd.github.io/libs/1fonts/1.4/1fonts.css' rel='stylesheet' type='text/css'/>
     <link rel="shortcut icon" href="../static/images/favicon.jpg" type="image/x-icon">
+    {% block head %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
 </head>
 <body>
@@ -41,7 +42,7 @@
             </form>
         </div>
         <div>
-            {% if user.is_authenticated %}
+            {% if user.is_authenticated and not user.is_superuser%}
                 <div>
                     <a href="{% url "profile" %}">{{ user.username }}</a>
                 </div>
