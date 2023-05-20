@@ -22,7 +22,6 @@ class Product(BaseModel):
     brand = models.CharField("Brand", max_length=75, null=False, blank=False)
     description = models.TextField("Description", null=False, blank=False)
     image = models.ImageField("Image", upload_to="Product_images", null=True, blank=True)
-    is_sold_out = models.BooleanField("Is sold out", default=False, null=False, blank=False)
 
     class Meta:
         ordering = ["name"]
@@ -30,6 +29,12 @@ class Product(BaseModel):
 
     def __str__(self):
         return f"{self.name}"
+
+    def is_sold_out(self):
+        self.is_sold_out = False
+        if self.count == 0:
+            self.is_sold_out = True
+        return self.is_sold_out
 
 
 class Comment(BaseModel):
