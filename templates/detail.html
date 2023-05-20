@@ -3,14 +3,14 @@
 {% block title %}{{ product.name }}{% endblock %}
 
 {% block content %}
-    <div>
-        <div class="card col-sm-6">
-            <h1>{{ product.name }}</h1>
-            <img src="{{ product.image }}" alt="product">
-            <p>برند: {{ product.brand }}</p>
-            <p>قیمت: {{ product.price }} تومان </p>
-            <p>تعداد باقی مانده: {{ product.count }}</p>
-            <p>توضیحات: {{ product.description }}</p>
+    <div class="grid grid-cols-5 gap-6">
+        <div class="col-span">
+            <img src="{{ product.image.url }}" alt="product_image" class="rounded-xl">
         </div>
+    <div class="col-span p-6 bg-gray-100 rounded-xl">
+        <h2 class="mb-6 text-3xl">{{ product.name }}</h2>
+        <p class="text-gray-500"><strong>قیمت: </strong>{{ product.price }}</p>
+        <p class="text-gray-700"><strong class="text-gray-500">توضیحات: </strong><br>{{ product.description }}</p>
+    </div>
     </div>
 {% endblock %}
