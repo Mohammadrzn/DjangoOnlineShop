@@ -1,8 +1,20 @@
 from django.db import models
-from Core.models import BaseModel, User
+from Core.models import BaseModel
+from django.contrib.auth.models import AbstractUser
 
 
-class Customer(User, BaseModel):
+class Customer(AbstractUser, BaseModel):
+    mobile = models.SmallIntegerField("Mobile", help_text="Example: 9123456789", null=True, blank=True)
+    telephone = models.SmallIntegerField(help_text="Enter without your city code", null=True, blank=True)
+    national_id = models.CharField("National ID", max_length=10, null=True, blank=True)
+    age = models.SmallIntegerField("Age", null=True, blank=True)
+
+    GENDER_CHOICES = (
+        ("F", "Femail"),
+        ("M", "Mail")
+    )
+    gender = models.CharField("Gender", choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
+
     class Meta:
         verbose_name = "Customer"
         verbose_name_plural = "Customers"
