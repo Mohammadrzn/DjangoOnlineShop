@@ -15,8 +15,19 @@
             <br><label for="password"></label>
             <br><input class="rounded-xl" type="password" id="password" name="password" placeholder="رمز" required><i
                 class="validation"></i><br>
+            <input type="checkbox" onclick="show_password()">نمایش رمز<br>
             <br><input class="px-2 bg-sky-500 text-white rounded-xl hover:bg-sky-700" type="submit" id="login"
-                   value="ورود">
+                       value="ورود">
         </form>
+        <script>
+            function show_password() {
+                const x = document.getElementById("password");
+                if (x.type === "password") {
+                    x.type = "text";
+                } else {
+                    x.type = "password";
+                }
+            }
+        </script>
     </div>
 {% endblock %}
