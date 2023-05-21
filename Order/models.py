@@ -1,6 +1,7 @@
 from django.db import models
 from Core.models import BaseModel
 from Customers.models import Customer
+from Product.models import Product
 from django.utils import timezone
 
 
@@ -9,7 +10,7 @@ class Order(BaseModel):
     registration_date = models.DateTimeField("Registration Date", auto_now_add=timezone.now, null=False, blank=False)
     delivery_date = models.DateField("Delivery Date", null=False, blank=False)
     address = models.TextField("Address", null=False, blank=False)
-    product = models.ManyToManyField("Product", null=False, blank=False)
+    product = models.ManyToManyField(Product, null=False, blank=False)
 
     class Meta:
         ordering = ["registration_date"]
