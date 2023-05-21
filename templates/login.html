@@ -7,7 +7,7 @@
 {% block title %}Login{% endblock %}
 
 {% block content %}
-    <div class="items-center col-span p-6 bg-gray-100 rounded-xl">
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <form>
             <label for="username"></label>
             <input class="rounded-xl" type="text" id="username" name="username" placeholder="نام کاربری" required><i
@@ -18,6 +18,7 @@
             <input type="checkbox" onclick="show_password()">نمایش رمز<br>
             <br><input class="px-2 bg-sky-500 text-white rounded-xl hover:bg-sky-700" type="submit" id="login"
                        value="ورود">
+            <p>عضو نیستید؟ <a href="{% url "signup" %}">ثبت نام کنید</a></p>
         </form>
         <script>
             function show_password() {
