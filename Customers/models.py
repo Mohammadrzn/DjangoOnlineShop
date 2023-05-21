@@ -15,6 +15,24 @@ class Customer(AbstractUser, BaseModel):
     )
     gender = models.CharField("Gender", choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
 
+    groups = models.ManyToManyField(
+        "auth.Group",
+        verbose_name="Groups",
+        related_name="customer_groups",
+        blank=True,
+        help_text="گروه هایی که این کاربر به آنها تعلق دارد. یک کاربر تمامی دسترسی هایی که در آن گروه تایین شده باشد "
+                  "را خواهد داشت.",
+        related_query_name="customer",
+    )
+    user_permissions = models.ManyToManyField(
+        "auth.Permission",
+        verbose_name="User Permissions",
+        related_name="customer_permissions",
+        blank=True,
+        help_text="دسترسی های مربوط به این کاربر را تایین کنید",
+        related_query_name="customer",
+    )
+
     class Meta:
         verbose_name = "Customer"
         verbose_name_plural = "Customers"
