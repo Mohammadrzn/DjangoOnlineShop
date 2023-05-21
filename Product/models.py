@@ -15,7 +15,7 @@ class Category(BaseModel):
 
 
 class Product(BaseModel):
-    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING)
+    category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="category_product")
     name = models.CharField("Name", max_length=100, null=False, blank=False)
     price = models.FloatField("Price", null=False, blank=False)
     count = models.SmallIntegerField(null=False, blank=False)
