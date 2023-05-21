@@ -1,0 +1,39 @@
+{%  extends "base.html" %}
+
+{% block title %}Signup{% endblock %}
+
+{% block content %}
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl">ثبت نام</h1>
+        <form method="post" action=".">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+
+            <div class="mb-3">
+                <label class="inline-block mb-2">نام کاربری</label><br>
+                {{ form.username }}
+            </div>
+            <div class="mb-3">
+                <label class="inline-block mb-2">رمز</label><br>
+                {{ form.password1 }}
+            </div><div class="mb-3">
+                <label class="inline-block mb-2">تکرار رمز</label><br>
+                {{ form.password2 }}
+            </div>
+
+
+            <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ثبت نام</button>
+            <p>عضو هستید؟ <a href="{% url "login" %}">وارد شوید</a></p>
+        </form>
+    </div>
+{#    <script>#}
+{#            function show_password() {#}
+{#                const x = document.getElementBy;#}
+{#                if (x.type === "password") {#}
+{#                    x.type = "text";#}
+{#                } else {#}
+{#                    x.type = "password";#}
+{#                }#}
+{#            }#}
+{#        </script>#}
+{% endblock %}
