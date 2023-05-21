@@ -30,12 +30,6 @@ class Product(BaseModel):
     def __str__(self):
         return f"{self.name}"
 
-    def is_sold_out(self):
-        self.is_sold_out = False
-        if self.count == 0:
-            self.is_sold_out = True
-        return self.is_sold_out
-
 
 class Comment(BaseModel):
     title = models.CharField("Title", max_length=100, null=False, blank=False)
