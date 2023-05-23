@@ -8,7 +8,7 @@ class Category(BaseModel):
 
     class Meta:
         ordering = ["name"]
-        verbose_name_plural = "Categories"
+        verbose_name_plural = "دسته بندی ها"
 
     def __str__(self):
         return f"{self.name}"
@@ -25,7 +25,7 @@ class Product(BaseModel):
 
     class Meta:
         ordering = ["name"]
-        verbose_name_plural = "Products"
+        verbose_name_plural = "محصولات"
 
     def __str__(self):
         return f"{self.name}"
@@ -38,7 +38,7 @@ class Comment(BaseModel):
     product = models.ForeignKey(Product, on_delete=models.DO_NOTHING)
 
     class Meta:
-        verbose_name_plural = "Comments"
+        verbose_name_plural = "کامنت ها"
 
     def __str__(self):
         return f"{self.title}"

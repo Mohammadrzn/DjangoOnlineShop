@@ -8,6 +8,7 @@ class Customer(AbstractUser, BaseModel):
     telephone = models.SmallIntegerField("تلفن", help_text="شماره کامل همراه با کد شهر", null=True, blank=True)
     national_id = models.CharField("کد ملی", max_length=10, null=True, blank=True)
     age = models.SmallIntegerField("سن", null=True, blank=True)
+    created_at = None
 
     GENDER_CHOICES = (
         ("F", "آقا"),

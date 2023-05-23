@@ -13,6 +13,7 @@ class Order(BaseModel):
 
     class Meta:
         ordering = ["registration_date"]
+        verbose_name_plural = "سفارش ها"
 
     def __str__(self):
         return f"{self.customer}"
