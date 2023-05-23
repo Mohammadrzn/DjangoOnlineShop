@@ -5,7 +5,7 @@ from django.contrib.auth.models import AbstractUser
 
 class Customer(AbstractUser, BaseModel):
     mobile = models.SmallIntegerField("موبایل", help_text="مثال: 9123456789", null=True, blank=True)
-    telephone = models.SmallIntegerField(help_text="شماره کامل همراه با کد شهر", null=True, blank=True)
+    telephone = models.SmallIntegerField("تلفن", help_text="شماره کامل همراه با کد شهر", null=True, blank=True)
     national_id = models.CharField("کد ملی", max_length=10, null=True, blank=True)
     age = models.SmallIntegerField("سن", null=True, blank=True)
 
