@@ -7,4 +7,4 @@ admin.site.register(Comment)
 
 @admin.register(Category)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["name", "jdatetime"]
+    list_display = ["name", "persian_created_at", "persian_edited_at", "persian_deleted_at"]
