@@ -13,8 +13,6 @@
     <div class="space-x-6">
         <a href="{% url "home" %}" class="px-6 py-2 text-xl bg-red-500 rounded-xl hover:bg-red-700">Digikal</a>
         {% if user.is_superuser or user.is_staf %}
-            <a href="#" class="px-6 py-2 text-lg bg-teal-500 text-white rounded-xl hover:bg-teal-700">افزودن محصول</a>
-        {% elif user.is_authenticated %}
             <a href="{% url "profile" %}"
                class="px-6 py-3 text-lg bg-teal-500 text-white rounded-xl">{{ user.username }}</a>
         {% else %}
