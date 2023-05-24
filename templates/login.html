@@ -20,15 +20,5 @@
                        value="ورود">
             <p>عضو نیستید؟ <a href="{% url "signup" %}">ثبت نام کنید</a></p>
         </form>
-        <script>
-            function show_password() {
-                const x = document.getElementById("password");
-                if (x.type === "password") {
-                    x.type = "text";
-                } else {
-                    x.type = "password";
-                }
-            }
-        </script>
     </div>
 {% endblock %}
