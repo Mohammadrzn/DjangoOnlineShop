@@ -41,8 +41,20 @@ INSTALLED_APPS = [
     'Core.apps.CoreConfig',
     'Customers',
     'Product',
-    'Order'
+    'Order',
+    'rest_framework',
+    'djoser',
 ]
+
+REST_FRAMEWORK = {
+    'DEFAULT_AUTHENTICATION_CLASSES': (
+        'rest_framework_simplejwt.authentication.JWTAuthentication',
+    ),
+}
+
+SIMPLE_JWT = {
+   'AUTH_HEADER_TYPES': ('JWT',),
+}
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -119,7 +131,7 @@ USE_TZ = True
 STATIC_URL = 'static/'
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media/"
-STATICFILES_DIRS = [BASE_DIR/'static']
+STATICFILES_DIRS = [BASE_DIR / 'static']
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
