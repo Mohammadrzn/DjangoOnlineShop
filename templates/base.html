@@ -12,7 +12,7 @@
 <nav class="px-6 py-5 justify-between items-center border-b border-green-200">
     <div class="space-x-6">
         <a href="{% url "home" %}" class="px-6 py-2 text-xl bg-red-500 rounded-xl hover:bg-red-700">Digikal</a>
-        {% if user.is_authanticated and not user.is_superuser or user.is_staf %}
+        {% if user.is_authenticated and not user.is_superuser or user.is_staff %}
             <a href="{% url "profile" %}"
                class="px-6 py-3 text-lg bg-teal-500 text-white rounded-xl">{{ user.username }}</a>
         {% else %}
