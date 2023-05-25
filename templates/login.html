@@ -8,17 +8,30 @@
 
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
-        <form>
-            <label for="username"></label>
-            <input class="rounded-xl" type="text" id="username" name="username" placeholder="نام کاربری" required><i
-                class=""></i>
-            <br><label for="password"></label>
-            <br><input class="rounded-xl" type="password" id="password" name="password" placeholder="رمز" required><i
-                class="validation"></i><br>
-            <input type="checkbox" onclick="show_password()">نمایش رمز<br>
-            <br><input class="px-2 bg-sky-500 text-white rounded-xl hover:bg-sky-700" type="submit" id="login"
-                       value="ورود">
-            <p>عضو نیستید؟ <a href="{% url "signup" %}">ثبت نام کنید</a></p>
+        <h1 class="mb-6 text-3xl flex items-center justify-center">ورود</h1>
+        <form method="post" action="{% url 'login' %}">
+            {% csrf_token %}
+            {% if errors %}
+                <ul class="text-red-500">
+                    {% for field_errors in errors.values %}
+                        {% for error in field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="mb-3 flex items-center justify-center">
+                <label class="inline-block mb-2">نام کاربری</label><br>
+                {{ form.username }}
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label class="inline-block mb-2">رمز</label><br>
+                {{ form.password }}
+            </div>
+            <div class="flex items-center justify-center">
+                <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">وارد شوید</button>
+            </div>
+            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "signup" %}">ثبت نام کنید</a></p>
         </form>
     </div>
 {% endblock %}
