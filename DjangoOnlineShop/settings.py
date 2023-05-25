@@ -53,7 +53,24 @@ REST_FRAMEWORK = {
 }
 
 SIMPLE_JWT = {
-   'AUTH_HEADER_TYPES': ('JWT',),
+    'AUTH_HEADER_TYPES': ('JWT',),
+}
+
+AUTHENTICATION_BACKENDS = [
+    'django.contrib.auth.backends.ModelBackend',  # default Django authentication backend
+]
+
+DJOSER = {
+    'LOGIN_FIELD': 'username',
+    'PASSWORD_RESET_CONFIRM_URL': '#/password/reset/confirm/{uid}/{token}',
+    'USERNAME_RESET_CONFIRM_URL': '#/username/reset/confirm/{uid}/{token}',
+    'ACTIVATION_URL': '#/activate/{uid}/{token}',
+    'SEND_ACTIVATION_EMAIL': True,
+    'SERIALIZERS': {
+        'user_create': "Customers.serializers.CustomerCreateSerializer",
+        'user': 'Customers.serializers.UserSerializer',
+        'current_user': 'djoser.serializers.UserSerializer',
+    }
 }
 
 MIDDLEWARE = [
