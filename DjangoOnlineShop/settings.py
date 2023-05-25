@@ -57,7 +57,7 @@ SIMPLE_JWT = {
 }
 
 AUTHENTICATION_BACKENDS = [
-    'django.contrib.auth.backends.ModelBackend',  # default Django authentication backend
+    'django.contrib.auth.backends.ModelBackend',
 ]
 
 DJOSER = {
