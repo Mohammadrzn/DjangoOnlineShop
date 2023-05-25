@@ -5,6 +5,7 @@ from django.db import models
 
 class Category(BaseModel):
     name = models.CharField("Name", max_length=100, null=False, blank=False)
+    category = models.ForeignKey("self", on_delete=models.CASCADE)
 
     class Meta:
         ordering = ["name"]
