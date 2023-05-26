@@ -6,7 +6,8 @@ from django.utils.html import mark_safe
 
 class Category(BaseModel):
     name = models.CharField("نام", max_length=100, null=False, blank=False)
-    inner_category = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
+    upper_category = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE,
+                                       verbose_name="دسته بندی اصلی")
 
     class Meta:
         ordering = ["name"]
