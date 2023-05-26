@@ -5,7 +5,7 @@ from django.db import models
 
 class Category(BaseModel):
     name = models.CharField("نام", max_length=100, null=False, blank=False)
-    inner_category = models.ForeignKey("self", on_delete=models.CASCADE)
+    inner_category = models.ForeignKey("self", on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
