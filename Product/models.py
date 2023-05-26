@@ -1,6 +1,7 @@
 from Core.models import BaseModel
 from Customers.models import Customer
 from django.db import models
+from django.utils.html import mark_safe
 
 
 class Category(BaseModel):
@@ -23,6 +24,13 @@ class Product(BaseModel):
     brand = models.CharField("برند", max_length=75, null=False, blank=False)
     description = models.TextField("توضیحات", null=False, blank=False)
     image = models.ImageField("تضویر", upload_to="Product_images", null=True, blank=True)
+
+    def image_tag(self):
+        return mark_safe('<img src="/media/%s" width="150" height="150" />' % self.image)
+
+    image_tag.allow_tags = True
+
+    image_tag.short_description = 'تصویر محصول'
 
     class Meta:
         ordering = ["name"]
