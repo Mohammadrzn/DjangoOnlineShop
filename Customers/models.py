@@ -1,6 +1,10 @@
 from django.db import models
 from Core.models import BaseModel
-from django.contrib.auth.models import AbstractUser
+from django.contrib.auth.models import AbstractUser, Group
+
+
+admin_group = Group.objects.get(name='ادمین')
+observer_group = Group.objects.get(name='ناظر')
 
 
 class Customer(AbstractUser, BaseModel):
@@ -9,6 +13,13 @@ class Customer(AbstractUser, BaseModel):
     national_id = models.CharField("کد ملی", max_length=10, null=True, blank=True)
     age = models.SmallIntegerField("سن", null=True, blank=True)
     created_at = None
+
+    ROLE_CHOICES = (
+        ("A", "ادمین"),
+        ("O", "ناظر"),
+        ("C", "مشتری")
+    )
+    role = models.CharField("نقش", choices=ROLE_CHOICES, max_length=1, default="C", null=False, blank=False)
 
     GENDER_CHOICES = (
         ("F", "آقا"),
@@ -22,6 +33,13 @@ class Customer(AbstractUser, BaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
+
+    def save(self, *args, **kwargs):
+        if self.role == 'A':
+            self.groups.add(admin_group)
+        elif self.role == 'O':
+            self.groups.add(observer_group)
+        super().save(*args, **kwargs)
 
 
 class Address(BaseModel):
