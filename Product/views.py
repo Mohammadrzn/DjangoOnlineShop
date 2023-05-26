@@ -12,17 +12,16 @@ def detail(request, pk):
 
 
 def main_category(request):
-    categories = Category.objects.filter(inner_category=None)
+    categories = Category.objects.filter(upper_category=None)
     return render(request, 'home.html', {
         'categories': categories,
     })
 
 
 def category_product(request, pk):
-    category = Category.objects.all()
-    product = get_object_or_404(Product, pk=pk)
-    category_products = Product.objects.filter(category=product.category, count__gt=0).exclude(pk=pk)
+    category = get_object_or_404(Category, pk=pk)
+    category_products = Product.objects.filter(category=category, count__gt=0)
     return render(request, "category.html", {
+        "category": category,
         "category_products": category_products,
-        "category": category
     })
