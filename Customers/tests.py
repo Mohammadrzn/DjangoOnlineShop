@@ -4,6 +4,9 @@ from django.contrib.auth.hashers import check_password
 
 
 class UsersTest(TestCase):
+    """
+    Unittest class for test creation of Customer model and superuser, and their methods
+    """
 
     def setUp(self) -> None:
         self.user = get_user_model().objects.create_user(password="test", username="test_user_name",
