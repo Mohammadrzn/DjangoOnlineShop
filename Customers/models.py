@@ -3,10 +3,6 @@ from Core.models import BaseModel
 from django.contrib.auth.models import AbstractUser, Group
 
 
-admin_group = Group.objects.get(name='ادمین')
-observer_group = Group.objects.get(name='ناظر')
-
-
 class Customer(AbstractUser, BaseModel):
     mobile = models.SmallIntegerField("موبایل", help_text="مثال: 9123456789", null=True, blank=True)
     telephone = models.SmallIntegerField("تلفن", help_text="شماره کامل همراه با کد شهر", null=True, blank=True)
@@ -33,13 +29,6 @@ class Customer(AbstractUser, BaseModel):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
-    def save(self, *args, **kwargs):
-        if self.role == 'A':
-            self.groups.add(admin_group)
-        elif self.role == 'O':
-            self.groups.add(observer_group)
-        super().save(*args, **kwargs)
 
 
 class Address(BaseModel):
