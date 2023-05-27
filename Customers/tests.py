@@ -29,6 +29,9 @@ class UsersTest(TestCase):
         self.assertEqual(self.user.gender, "M")
         self.assertFalse(self.user.is_superuser)
 
+    def test__str__user(self):
+        self.assertEqual(str(self.user), "test_first_name test_last_name")
+
     def test_create_superuser(self):
         self.assertEqual(self.superuser.username, "admin")
         self.assertEqual(self.superuser.email, "test@admin.com")
