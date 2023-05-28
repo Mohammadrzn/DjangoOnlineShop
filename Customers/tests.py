@@ -11,6 +11,9 @@ class UsersTest(TestCase):
     """
 
     def setUp(self) -> None:
+        """
+        creating the models requirements for testing
+        """
         self.user = get_user_model().objects.create_user(edited_at=now(), deleted_at=now(), password="test",
                                                          username="test_user_name", first_name="test_first_name",
                                                          last_name="test_last_name", email="test@user.com",
@@ -20,6 +23,9 @@ class UsersTest(TestCase):
                                                                    password="test")
 
     def test_create_user(self):
+        """
+        test creation of Customer model
+        """
         self.assertNotEqual(self.user.edited_at, now())
         self.assertNotEqual(self.user.deleted_at, now())
         self.assertTrue(self.user.password, check_password("test", self.user.password))
@@ -39,9 +45,15 @@ class UsersTest(TestCase):
         self.assertFalse(self.user.is_deleted)
 
     def test__str__user(self):
+        """
+        test __str__ method of Customer model
+        """
         self.assertEqual(str(self.user), "test_first_name test_last_name")
 
     def test_create_superuser(self):
+        """
+        test creation of superuser
+        """
         self.assertEqual(self.superuser.username, "admin")
         self.assertEqual(self.superuser.email, "test@admin.com")
         self.assertTrue(self.user.password, check_password("test", self.user.password))
@@ -56,12 +68,18 @@ class TestAddress(TestCase):
     """
 
     def setUp(self) -> None:
+        """
+        creating the models requirements for testing
+        """
         self.user = get_user_model().objects.create_user(edited_at=now(), deleted_at=now(), password="test",
                                                          username="test_user_name", role="A")
         self.address = Address.objects.create(created_at=now(), edited_at=now(), customer=self.user, state="test",
                                               city="test", full_address="test", postal_code=123456789)
 
     def test_create_address(self):
+        """
+        test creation of Address model
+        """
         self.assertNotEqual(self.address.created_at, now())
         self.assertNotEqual(self.address.edited_at, now())
         self.assertEqual(self.address.customer, self.user)
@@ -71,4 +89,7 @@ class TestAddress(TestCase):
         self.assertNotEqual(self.address.postal_code, 987654321)
 
     def test__str__address(self):
+        """
+        test __str__ method of Address model
+        """
         self.assertEqual(str(self.address), str(self.user.id))
