@@ -38,7 +38,7 @@ class Login(APIView):
             "iat": datetime.datetime.now()
         }
 
-        token = jwt.encode(payload, "secret", algorithm="HS256").decode("utf-8")
+        token = jwt.encode(payload, "secret", algorithm="HS256")
 
         response = Response()
         response.set_cookie(key="jwt", value=token, httponly=True)
@@ -47,6 +47,24 @@ class Login(APIView):
         }
 
         return response
+
+
+class CustomerView(APIView):
+    def get(self, request):
+        token = request.COOKIES.get("jwt")
+
+        if not token:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+
+        try:
+            payload = jwt.decode(token, "secret", algorithms=["HS256"])
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+
+        user = Customer.objects.filter(id=payload["id"]).first()
+        serializer = CustomerSerializer(user)
+
+        return Response(serializer.data)
 
 
 def contact(request):
