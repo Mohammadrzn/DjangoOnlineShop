@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect
 from .forms import SignupForm, LoginForm
-from .serializers import CustomerCreateSerializer
+from .serializers import UserCreateSerializer
 from djoser.views import UserViewSet
 from rest_framework.permissions import AllowAny
 from .models import Customer
@@ -25,7 +25,7 @@ def signup(request):
     if request.method == 'POST':
         form = SignupForm(request.POST)
         if form.is_valid():
-            serializer = CustomerCreateSerializer(data=form.cleaned_data)
+            serializer = UserCreateSerializer(data=form.cleaned_data)
             if serializer.is_valid():
                 serializer.save()
                 return redirect('login')
