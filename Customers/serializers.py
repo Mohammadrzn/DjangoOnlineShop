@@ -1,13 +1,14 @@
-from djoser.serializers import UserCreateSerializer, UserSerializer
+from djoser.serializers import UserCreateSerializer as BaseUserCreateSerializer, UserSerializer as BaseUserSerializer
 from .models import Customer
 
 
-class CustomerCreateSerializer(UserCreateSerializer):
-    class Meta(UserCreateSerializer.Meta):
+class UserCreateSerializer(BaseUserCreateSerializer):
+    class Meta(BaseUserCreateSerializer.Meta):
         model = Customer
-        fields = ("username", "password")
+        fields = ['id', 'username', 'first_name', 'last_name', 'email', 'password']
 
 
-class CustomerSerializer(UserSerializer):
-    class Meta(UserSerializer.Meta):
+class UserSerializer(BaseUserSerializer):
+    class Meta(BaseUserSerializer.Meta):
         model = Customer
+        fields = ['id', 'username', 'first_name', 'last_name', 'email']
