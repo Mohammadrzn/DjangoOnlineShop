@@ -1,73 +1,52 @@
-from django.shortcuts import render, redirect
-from .forms import SignupForm, LoginForm
-from .serializers import UserCreateSerializer
-from djoser.views import UserViewSet
-from rest_framework.permissions import AllowAny
-from .models import Customer
-from django.contrib.auth import get_user_model
-from rest_framework_simplejwt.tokens import RefreshToken
-from rest_framework.decorators import api_view, permission_classes
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.exceptions import AuthenticationFailed
 from rest_framework.response import Response
-
-
-class CustomerViewSet(UserViewSet):
-    queryset = Customer.objects.all()
-    permission_classes = [AllowAny]
+from .serializers import CustomerSerializer
+from rest_framework.views import APIView
+from django.shortcuts import render
+from .models import Customer
+import jwt, datetime
 
 
 def show_profile(request):
     return render(request, "profile.html")
 
 
-def signup(request):
-    errors = {}
-    if request.method == 'POST':
-        form = SignupForm(request.POST)
-        if form.is_valid():
-            serializer = UserCreateSerializer(data=form.cleaned_data)
-            if serializer.is_valid():
-                serializer.save()
-                return redirect('login')
-            else:
-                errors = serializer.errors
-        else:
-            errors = form.errors
-    else:
-        form = SignupForm()
-
-    return render(request, 'signup.html', {'form': form, 'errors': errors})
+class Signup(APIView):
+    def post(self, request):
+        serializer = CustomerSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data)
 
 
-def my_login(request):
-    errors = {}
-    if request.method == 'POST':
-        form = LoginForm(request.POST)
-        if form.is_valid():
-            username = form.cleaned_data.get('username')
-            password = form.cleaned_data.get('password')
-            user = get_user_model().objects.get(username=username)
+class Login(APIView):
+    def post(self, request):
+        username = request.data["username"]
+        password = request.data["password"]
 
-            if user.check_password(password):
-                refresh = RefreshToken.for_user(user)
-                token = str(refresh.access_token)
-                request.session['jwt_token'] = token
+        user = Customer.objects.filter(username=username).first()
 
-                return redirect('home')
-            else:
-                errors['authentication'] = 'Invalid username or password'
-        else:
-            errors = form.errors
-    else:
-        form = LoginForm()
+        if user is None:
+            raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
 
-    return render(request, 'login.html', {'form': form, 'errors': errors})
+        if not user.check_password(password):
+            raise AuthenticationFailed("رمز اشتباه است")
 
+        payload = {
+            "id": user.id,
+            "exp": datetime.datetime.now() + datetime.timedelta(days=10),
+            "iat": datetime.datetime.now()
+        }
 
-@api_view(['GET'])
-@permission_classes([IsAuthenticated])
-def check_auth(request):
-    return Response({'message': 'Authenticated'}, status=200)
+        token = jwt.encode(payload, "secret", algorithm="HS256").decode("utf-8")
+
+        response = Response()
+        response.set_cookie(key="jwt", value=token, httponly=True)
+        response.data = {
+            "message": "success"
+        }
+
+        return response
 
 
 def contact(request):
