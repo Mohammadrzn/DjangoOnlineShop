@@ -1,5 +1,6 @@
 from django.db import models
 from Core.models import BaseModel
+from .managers import CustomerManager
 from django.contrib.auth.models import AbstractUser, Group
 
 
@@ -22,6 +23,8 @@ class Customer(AbstractUser, BaseModel):
         ("M", "خانم")
     )
     gender = models.CharField("جنسیت", choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
+
+    objects = CustomerManager()
 
     class Meta:
         verbose_name = "کاربر"
