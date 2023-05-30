@@ -67,5 +67,15 @@ class CustomerView(APIView):
         return Response(serializer.data)
 
 
+class Logout(APIView):
+    def get(self, request):
+        response = Response()
+        response.delete_cookie("jwt")
+        response.data = {
+            "message": "success"
+        }
+        return response
+
+
 def contact(request):
     return render(request, "contact.html")
