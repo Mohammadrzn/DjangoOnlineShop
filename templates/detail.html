@@ -5,7 +5,11 @@
 {% block content %}
     <div class="grid grid-cols-5 gap-6">
         <div class="col-span">
-            <img src="{{ product.image.url }}" alt="product_image" class="rounded-xl">
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="product_img" class="rounded-t-xl">
+            {% else %}
+                <p>محصول تصویری ندارد</p>
+            {% endif %}
         </div>
         <div class="col-span p-6 bg-gray-100 rounded-xl">
             <h2 class="mb-6 text-3xl">{{ product.name }}</h2>
@@ -21,7 +25,11 @@
                     <div>
                         <a href="{% url "product:detail" product.id %}">
                             <div>
-                                <img src="{{ product.image.url }}" alt="product_img" class="rounded-t-xl">
+                                {% if product.image %}
+                                    <img src="{{ product.image.url }}" alt="product_img" class="rounded-t-xl">
+                                {% else %}
+                                    <p>محصول تصویری ندارد</p>
+                                {% endif %}
                             </div>
                             <div class="p-6 bg-white rounded-b-xl">
                                 <h2 class="text-2xl">{{ product.name }}</h2>
