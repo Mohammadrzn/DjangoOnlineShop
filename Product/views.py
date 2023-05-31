@@ -11,6 +11,10 @@ def detail(request, pk):
     })
 
 
+def order_page(request):
+    return render(request, "order.html")
+
+
 def main_category(request):
     categories = Category.objects.filter(upper_category=None)
     return render(request, 'home.html', {
