@@ -4,7 +4,8 @@ from .serializers import CustomerSerializer
 from rest_framework.views import APIView
 from django.shortcuts import render
 from .models import Customer
-import jwt, datetime
+import datetime
+import jwt
 
 
 def show_profile(request):
@@ -12,7 +13,8 @@ def show_profile(request):
 
 
 class Signup(APIView):
-    def post(self, request):
+    @staticmethod
+    def post(request):
         serializer = CustomerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
@@ -20,7 +22,8 @@ class Signup(APIView):
 
 
 class Login(APIView):
-    def post(self, request):
+    @staticmethod
+    def post(request):
         username = request.data["username"]
         password = request.data["password"]
 
@@ -50,7 +53,8 @@ class Login(APIView):
 
 
 class CustomerView(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         token = request.COOKIES.get("jwt")
 
         if not token:
@@ -68,7 +72,8 @@ class CustomerView(APIView):
 
 
 class Logout(APIView):
-    def get(self, request):
+    @staticmethod
+    def get(request):
         response = Response()
         response.delete_cookie("jwt")
         response.data = {
