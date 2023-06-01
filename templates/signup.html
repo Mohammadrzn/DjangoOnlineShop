@@ -5,7 +5,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">ثبت نام</h1>
-        <form method="post" action="{% url 'signup' %}">
+        <form id="register-form" method="post" action="{% url 'auth:signup' %}" onsubmit="signup(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">
@@ -17,17 +17,47 @@
                 </ul>
             {% endif %}
             <div class="mb-3 flex items-center justify-center">
-                <label class="inline-block mb-2">نام کاربری</label><br>
-                {{ form.username }}
+                <label for="signupUsername" class="inline-block mb-2">نام کاربری</label><br>
+                <input id="signupUsername" class="rounded-xl" type="text" name="signupUsername">
             </div>
             <div class="mb-3 flex items-center justify-center">
-                <label class="inline-block mb-2">رمز</label><br>
-                {{ form.password }}
+                <label for="signupPassword" class="inline-block mb-2">رمز</label><br>
+                <input id="signupPassword" class="rounded-xl" type="password" name="signupPassword">
+                <input type="checkbox" onclick="show_pass()">نمایش رمز
             </div>
             <div class="flex items-center justify-center">
-                <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ثبت نام</button>
+                <button id="signupSubmit" type="submit" class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ثبت نام</button>
             </div>
-            <p class="flex items-center justify-center">عضو هستید؟ <a href="{% url "login" %}">وارد شوید</a></p>
+            <p class="flex items-center justify-center">عضو هستید؟ <a href="{% url "auth:login" %}">وارد شوید</a></p>
         </form>
     </div>
+    <script>
+	    async function signup(event, el){
+            event.preventDefault()
+            let response = await fetch(
+            el.action, {method: el.method, headers: {"Content-Type": "application/json"},
+	    	body: JSON.stringify({
+	    	username: el.querySelector("#signupUsername").value,
+	    	password: el.querySelector("#signupPassword").value,})
+	    	}
+	    	)
+
+	    	if (response.status === 200){
+                window.location.replace("/auth/profile/")
+            } else {
+                alert(" Please check your information")
+
+            }
+        }
+
+        function show_pass() {
+	        let x = document.getElementById("signupPassword");
+	        if (x.type === "password") {
+            	x.type = "text";
+  	        }
+	        else {
+            	x.type = "password";
+  	        }
+        }
+    </script>
 {% endblock %}
