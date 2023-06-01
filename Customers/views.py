@@ -1,8 +1,8 @@
 from rest_framework.exceptions import AuthenticationFailed
+from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from .serializers import CustomerSerializer
 from rest_framework.views import APIView
-from django.shortcuts import render
 from .models import Customer
 import datetime
 import jwt
@@ -14,14 +14,22 @@ def show_profile(request):
 
 class Signup(APIView):
     @staticmethod
+    def get(request):
+        return render(request, "signup.html", context={})
+
+    @staticmethod
     def post(request):
         serializer = CustomerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return Response(serializer.data)
+        return redirect("auth:profile")
 
 
 class Login(APIView):
+    @staticmethod
+    def get(request):
+        return render(request, "login.html")
+
     @staticmethod
     def post(request):
         username = request.data["username"]
@@ -49,7 +57,7 @@ class Login(APIView):
             "message": "success"
         }
 
-        return response
+        return redirect("auth:profile")
 
 
 class CustomerView(APIView):
