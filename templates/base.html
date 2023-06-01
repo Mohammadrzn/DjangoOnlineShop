@@ -14,14 +14,14 @@
         <div>
             <a href="{% url "home" %}" class="px-6 py-2 text-xl bg-red-500 rounded-xl hover:bg-red-700">Digikal</a>
             {% if user.is_authenticated and not user.is_superuser %}
-                <a href="{% url "profile" %}"
+                <a href="{% url "auth:profile" %}"
                    class="px-6 py-3 text-lg bg-teal-500 text-white rounded-xl">{{ user.username }}</a>
             {% else %}
-                <a href="{% url "login" %}"
+                <a href="{% url "auth:login" %}"
                    class="px-6 py-2 text-lg bg-teal-500 text-white rounded-xl hover:bg-teal-700">ورود
                     / ثبت نام</a>
             {% endif %}
-            <a href="{% url "contact_us" %}" class="px-6 py-2 text-lg rounded-xl bg-yellow-300 hover:bg-yellow-600">مشکلی
+            <a href="{% url "auth:contact_us" %}" class="px-6 py-2 text-lg rounded-xl bg-yellow-300 hover:bg-yellow-600">مشکلی
                 پیش آمده؟</a>
         </div>
         <div class="flex-1 text-center">
