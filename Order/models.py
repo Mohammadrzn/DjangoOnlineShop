@@ -17,3 +17,10 @@ class Order(BaseModel):
 
     def __str__(self):
         return f"{self.customer}"
+
+
+class Cart(BaseModel):
+    created_at = None
+    edited_at = None
+    deleted_at = None
+    product = models.ManyToManyField(Product, related_name="cart_product")
