@@ -6,4 +6,5 @@ admin.site.register(Address)
 
 @admin.register(Customer)
 class CategoryAdmin(admin.ModelAdmin):
-    list_display = ["username", "get_full_name", "persian_created_at", "persian_edited_at", "persian_deleted_at"]
+    list_display = ["username", "get_full_name", "mobile", "email", "date_joined", "persian_edited_at",
+                    "persian_deleted_at"]
