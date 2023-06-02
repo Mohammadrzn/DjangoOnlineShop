@@ -12,7 +12,7 @@ def detail(request, pk):
 
 
 def order_page(request):
-    return render(request, "order.html")
+    return render(request, "cart.html")
 
 
 def main_category(request):
