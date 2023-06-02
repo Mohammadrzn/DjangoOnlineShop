@@ -1,0 +1,19 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}order{% endblock %}
+
+{% block content %}
+    <div style="width: 200px">
+        <div id="one" class="flex flex-wrap rounded-xl border border-red-500">
+            <div class="px-4 py-1 text-center text-gray-800">قیمت کالاها: </div>
+            <div id="sum_price_before" class="p-1 text-center text-gray-800">5000000</div>
+            <div class="w-full"></div>
+            <div class="px-4 py-1 text-center">تخفیف: </div>
+            <div id="discount" class="p-1 text-center">(15%) 7000</div>
+        </div>
+    </div>
+{% endblock %}
