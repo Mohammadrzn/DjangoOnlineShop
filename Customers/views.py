@@ -1,7 +1,7 @@
+from .serializers import CustomerSerializer, ProfileSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
-from .serializers import CustomerSerializer
 from rest_framework.views import APIView
 from .models import Customer
 import datetime
@@ -60,25 +60,6 @@ class Login(APIView):
         return redirect("auth:profile")
 
 
-class CustomerView(APIView):
-    @staticmethod
-    def get(request):
-        token = request.COOKIES.get("jwt")
-
-        if not token:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
-
-        try:
-            payload = jwt.decode(token, "secret", algorithms=["HS256"])
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
-
-        user = Customer.objects.filter(id=payload["id"]).first()
-        serializer = CustomerSerializer(user)
-
-        return Response(serializer.data)
-
-
 class Logout(APIView):
     @staticmethod
     def get(request):
@@ -88,6 +69,36 @@ class Logout(APIView):
             "message": "success"
         }
         return response
+
+
+class Change(APIView):
+    @staticmethod
+    def get(request):
+        serializer = ProfileSerializer
+        return render(request, "change.html", {"serializer": serializer})
+
+    @staticmethod
+    def post(request):
+        token = request.COOKIES.get("jwt")
+
+        if not token:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+
+        try:
+            payload = jwt.decode(token, "secret", algorithms=["HS256"])
+            user = Customer.objects.filter(id=payload["id"]).first()
+            if not user:
+                raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
+
+            elif request.method == "POST":
+                serializer = ProfileSerializer(user, data=request.data)
+                if serializer.is_valid():
+                    serializer.save()
+                    return redirect("auth:change")
+                else:
+                    return render(request, "change.html", {"serializer": serializer})
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
 
 
 def contact(request):
