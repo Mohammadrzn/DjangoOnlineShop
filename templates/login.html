@@ -32,7 +32,8 @@
             <div class="flex items-center justify-center">
                 <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">وارد شوید</button>
             </div>
-            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "auth:signup" %}">ثبت نام کنید</a></p>
+            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "auth:signup" %}">ثبت نام کنید</a>
+            </p>
         </form>
     </div>
     <script>
@@ -50,20 +51,19 @@
             });
 
             if (response.status === 200) {
-                alert("Welcome to group five weblog");
                 window.location.replace("/auth/profile/");
             } else {
-                alert("Invalid username or password");
+                alert("نام کاربری یا رمز اشتباه است");
             }
         }
+
         function show_pass() {
-	        let x = document.getElementById("loginPassword");
-	        if (x.type === "password") {
-    	        x.type = "text";
-  	        }
-	        else {
-    	        x.type = "password";
-  	        }
+            let x = document.getElementById("loginPassword");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
         }
     </script>
 {% endblock %}
