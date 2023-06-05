@@ -68,7 +68,7 @@ class Logout(APIView):
         response.data = {
             "message": "success"
         }
-        return response
+        return redirect("http://127.0.0.1:8000")
 
 
 class Change(APIView):
