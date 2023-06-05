@@ -1,8 +1,20 @@
 {% extends "base.html" %}
 
+{% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{% endblock %}
+
 {% block title %}profile{% endblock %}
 
 {% block content %}
-    <h1>خوش آمدید {{ user.username }}</h1>
-    <a href="{% url 'auth:change' %}">تغییر اطلاعات کاربری</a>
+    <div style="max-width: 260px" class="rounded-xl border border-red-500 p-2">
+        <p class="py-4 text-center" style="font-size:20px">خوش آمدید {{ user.username }}</p>
+        <a href="{% url 'auth:change' %}" class="hover:text-gray-500 fa fa-user-o" style="font-size:17px">مشاهده و تغییر
+            اطلاعات کاربری</a>
+        <a href="#" class="hover:text-gray-500 fa fa-bookmark-o" style="font-size:17px">محصولات ذخیره شده</a>
+        <a href="#" class="hover:text-gray-500 fa fa-shopping-bag" style="font-size:17px">سفارش ها</a>
+        <br><a href="#" class="hover:text-gray-500 fa fa-comment-o" style="font-size:17px">دیدگاها</a>
+        <br><a href="#" class="hover:text-gray-500 fa fa-building-o" style="font-size:17px">آدرس ها</a>
+        <br><a href="{% url 'auth:logout' %}" class="hover:text-gray-500 fa fa-sign-out" style="font-size:17px">خروج</a>
+    </div>
 {% endblock %}
