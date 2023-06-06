@@ -7,10 +7,10 @@
 {% block title %}home{% endblock %}
 
 {% block content %}
-    <div class="mt-6 px-6 py-12 bg-gray-100">
-        <h2 class="mb-12 text-2xl text-center">جدیدترین محصولات</h2>
+    <div class="mt-6 px-6 py-12 bg-sky-200 ">
+        <h2 class="mb-12 text-2xl text-center">فروش فوق العاده</h2>
         <div class="grid grid-cols-5 gap-3">
-            {% for product in new_products %}
+            {% for product in discount_product %}
                 <div>
                     <a href="{% url "product:detail" product.id %}">
                         <div class="text-center">
@@ -22,7 +22,9 @@
                         </div>
                         <div class="p-6 bg-white">
                             <h2 class="text-2xl">{{ product.name }}</h2>
-                            <p class="text-gray-500">قیمت: {{ product.price }} تومان </p>
+                            <span>قیمت: {{ product.get_price }}تومان </span>
+                            <span class="border bg-red-600 p-1 text-white rounded-full">%{{ product.discount_percent }}</span>
+                            <p class="text-gray-500 line-through px-12">{{ product.price }}</p>
                             {% if product.count <= 5 %}
                                 <p class="text-red-500">فقط {{ product.count }} عدد در انبار باقی مانده</p>
                             {% endif %}
@@ -43,10 +45,11 @@
             {% endfor %}
         </div>
     </div>
-    <div class="mt-6 px-6 py-12 bg-sky-200 ">
-        <h2 class="mb-12 text-2xl text-center">فروش فوق العاده</h2>
+
+    <div class="mt-6 px-6 py-12 bg-gray-100">
+        <h2 class="mb-12 text-2xl text-center">جدیدترین محصولات</h2>
         <div class="grid grid-cols-5 gap-3">
-            {% for product in discount_product %}
+            {% for product in new_products %}
                 <div>
                     <a href="{% url "product:detail" product.id %}">
                         <div class="text-center">
@@ -58,9 +61,7 @@
                         </div>
                         <div class="p-6 bg-white">
                             <h2 class="text-2xl">{{ product.name }}</h2>
-                            <span>قیمت: {{ product.get_price }}تومان </span>
-                            <span class="border bg-red-600 p-1 text-white rounded-full">%{{ product.discount_percent }}</span>
-                            <p class="text-gray-500 line-through px-12">{{ product.price }}</p>
+                            <p class="text-gray-500">قیمت: {{ product.price }} تومان </p>
                             {% if product.count <= 5 %}
                                 <p class="text-red-500">فقط {{ product.count }} عدد در انبار باقی مانده</p>
                             {% endif %}
