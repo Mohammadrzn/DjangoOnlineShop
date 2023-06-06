@@ -8,6 +8,16 @@
     {% block head %}{% endblock %}
     <title>{% block title %}{% endblock %}</title>
     <style>
+        body {
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        footer {
+            margin-top: auto;
+        }
+
         .dropdown {
             position: relative;
             display: inline-block;
