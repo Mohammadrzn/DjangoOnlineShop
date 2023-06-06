@@ -23,7 +23,6 @@ class Customer(AbstractUser, BaseModel):
     )
     gender = models.CharField("جنسیت", choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
 
-
     class Meta:
         verbose_name = "کاربر"
         verbose_name_plural = "کاربران"
