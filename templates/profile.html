@@ -32,7 +32,7 @@
             <hr class="h-px my-2 bg-gray-300 border-0">
             <span class="fa fa-comment-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">دیدگاها</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
-            <span class="fa fa-building-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">آدرس ها</a>
+            <span class="fa fa-building-o pl-2"></span><a href="{% url 'auth:addresses' %}" class="hover:text-gray-500" style="font-size:17px">آدرس ها</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
             <span class="fa fa-sign-out pl-2"></span><a href="{% url 'auth:logout' %}" class="hover:text-gray-500" style="font-size:17px">خروج</a>
         </div>
