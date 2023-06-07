@@ -101,5 +101,11 @@ class Change(APIView):
             raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
 
 
+class Address(APIView):
+    @staticmethod
+    def get(request):
+        return render(request, "addresses.html")
+
+
 def contact(request):
     return render(request, "contact.html")
