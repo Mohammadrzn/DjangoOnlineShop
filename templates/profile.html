@@ -3,6 +3,12 @@
 {% block head %}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <style>
+        .float-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
         .float-child {
             float: right;
         }
@@ -13,19 +19,24 @@
 
 {% block content %}
     <div class="float-container">
-        <div style="max-width: 260px" class="float-child rounded-xl border border-red-500 p-2">
+        <div id="one" style="max-width: 265px" class="ml-10 float-child rounded-xl border border-red-500 p-2">
             <p class="py-4 text-center" style="font-size:20px">خوش آمدید {{ user.username }}</p>
-            <a href="{% url 'auth:change' %}" class="hover:text-gray-500 fa fa-user-o" style="font-size:17px">مشاهده و
+            <hr class="h-px my-4 bg-yellow-500 border-0">
+            <span class="fa fa-user-o pl-2 mt-5"></span><a href="{% url 'auth:change' %}" class="hover:text-gray-500" style="font-size:17px">مشاهده و
                 تغییر
                 اطلاعات کاربری</a>
-            <a href="#" class="hover:text-gray-500 fa fa-bookmark-o" style="font-size:17px">محصولات ذخیره شده</a>
-            <a href="#" class="hover:text-gray-500 fa fa-shopping-bag" style="font-size:17px">سفارش ها</a>
-            <br><a href="#" class="hover:text-gray-500 fa fa-comment-o" style="font-size:17px">دیدگاها</a>
-            <br><a href="#" class="hover:text-gray-500 fa fa-building-o" style="font-size:17px">آدرس ها</a>
-            <br><a href="{% url 'auth:logout' %}" class="hover:text-gray-500 fa fa-sign-out"
-                   style="font-size:17px">خروج</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-bookmark-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">محصولات ذخیره شده</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-shopping-bag pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">سفارش ها</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-comment-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">دیدگاها</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-building-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">آدرس ها</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-sign-out pl-2"></span><a href="{% url 'auth:logout' %}" class="hover:text-gray-500" style="font-size:17px">خروج</a>
         </div>
-        <div style="max-width: 800px" class="float-child rounded-xl border border-red-500 p-5">
+        <div id="two" style="max-width: 1000px" class="float-child rounded-xl border border-red-500 p-5">
             <h1 class="mb-10">سفارش های من</h1>
             <div class="float-container">
                 <div class="float-child border-l border-gray-300 p-5">
@@ -33,7 +44,7 @@
                         <div class="float-child">
                             <img src="/static/images/status-processing.svg" alt="processing_img">
                         </div>
-                        <div class="float-child mt-3 mr-4">
+                        <div class="float-child mt-3 mr-4 ml-12 pl-12">
                             <p>0 سفارش</p>
                             <p>جاری</p>
                         </div>
@@ -44,7 +55,7 @@
                         <div class="float-child">
                             <img src="/static/images/status-delivered.svg" alt="processing_img">
                         </div>
-                        <div class="float-child mt-3 mr-4">
+                        <div class="float-child mt-3 mr-4 ml-12 pl-12">
                             <p>0 سفارش</p>
                             <p>تحویل شده</p>
                         </div>
@@ -55,7 +66,7 @@
                         <div class="float-child">
                             <img src="/static/images/status-returned.svg" alt="processing_img">
                         </div>
-                        <div class="float-child mt-3 mr-4">
+                        <div class="float-child mt-3 mr-4 ml-12 pl-12">
                             <p>0 سفارش</p>
                             <p>مرجوع شده</p>
                         </div>
