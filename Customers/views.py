@@ -1,6 +1,6 @@
 from .serializers import CustomerSerializer, ProfileSerializer
 from rest_framework.exceptions import AuthenticationFailed
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from .models import Customer
@@ -51,13 +51,13 @@ class Login(APIView):
 
         token = jwt.encode(payload, "secret", algorithm="HS256")
 
-        response = Response()
+        response = HttpResponseRedirect(reverse("auth:profile"))
         response.set_cookie(key="jwt", value=token, httponly=True)
         response.data = {
             "message": "success"
         }
 
-        return redirect("auth:profile")
+        return response
 
 
 class Logout(APIView):
