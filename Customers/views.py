@@ -8,8 +8,23 @@ import datetime
 import jwt
 
 
-def show_profile(request):
-    return render(request, "profile.html")
+class ShowProfile(APIView):
+    @staticmethod
+    def get(request):
+        token = request.COOKIES.get("jwt")
+
+        if not token:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+
+        try:
+            payload = jwt.decode(token, "secret", algorithms=["HS256"])
+            user = Customer.objects.filter(id=payload["id"]).first()
+            if not user:
+                raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+
+        return render(request, "profile.html")
 
 
 class Signup(APIView):
