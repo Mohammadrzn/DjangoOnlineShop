@@ -2,12 +2,40 @@ from Core.models import BaseModel
 from Customers.models import Customer
 from django.db import models
 from django.utils.html import mark_safe
+from django.core.exceptions import ValidationError
+
+
+class Discount(BaseModel):
+    choice = (('c', 'نقدی'), ('p', 'درصدی'))
+    type = models.CharField(choices=choice, max_length=1, null=True, blank=True, verbose_name='نوع تخفیف')
+    amount = models.IntegerField(verbose_name='مقدار تخفیف')
+    status = models.BooleanField(default=False)
+
+    class Meta:
+        verbose_name = "تخفیف"
+
+    def __str__(self):
+        return str(self.amount)
+
+    def clean(self):
+        if self.type == 'p':
+            if self.amount < 0 or self.amount > 100:
+                raise ValidationError("مقدار تخفیف باید بین 0 تا 100 درصد باشد")
+        elif self.type == 'c':
+            if self.amount < 0:
+                raise ValidationError("مقدار تخفیف نمی تواند از قیمت محصول بیشتر باشد")
+
+    def save(self, *args, **kwargs):
+        self.full_clean()
+        super().save(*args, **kwargs)
 
 
 class Category(BaseModel):
     name = models.CharField("نام", max_length=100, null=False, blank=False)
     upper_category = models.ForeignKey("self", null=True, blank=True, on_delete=models.CASCADE,
                                        verbose_name="دسته بندی اصلی")
+    discount = models.ForeignKey(Discount, related_name='category_discount', verbose_name="تخفیف دسته بندی",
+                                 on_delete=models.CASCADE, null=True, blank=True)
 
     class Meta:
         ordering = ["name"]
@@ -25,8 +53,8 @@ class Product(BaseModel):
     brand = models.CharField("برند", max_length=75, null=False, blank=False)
     description = models.TextField("توضیحات", null=False, blank=False)
     image = models.ImageField("تصویر", upload_to="Product_images", null=True, blank=True)
-    discount_percent = models.SmallIntegerField("درصد تخفیف", null=False, blank=False,
-                                                help_text="بدون علمات درصد وارد شود، اگر نخفیف ندارد 0 وارد کنید")
+    discount = models.ForeignKey(Discount, related_name='product_discount', verbose_name="تخفیف محصول",
+                                 on_delete=models.CASCADE, null=True, blank=True)
 
     def image_tag(self):
         return mark_safe('<img src="/media/%s" width="150" height="150" />' % self.image)
@@ -34,14 +62,6 @@ class Product(BaseModel):
     image_tag.allow_tags = True
 
     image_tag.short_description = 'تصویر محصول'
-
-    def get_price(self):
-        if self.discount_percent == 0:
-            return self.price
-        else:
-            return self.price - (self.discount_percent / 100 * self.price)
-
-    get_price.short_description = "قیمت پس از تخفیف"
 
     class Meta:
         ordering = ["name"]
