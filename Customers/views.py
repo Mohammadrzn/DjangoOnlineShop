@@ -1,9 +1,15 @@
-from .serializers import CustomerSerializer, ProfileSerializer
+from django.views import View
+import re
+from .serializers import CustomerSerializer, ProfileSerializer, AddressSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from django.db.models import Q
+from .tasks import send_otp_email, send_otp_sms
+import redis
 from .models import Customer
+from .forms import VerificationForm, SendOTPForm
 import datetime
 import jwt
 
@@ -120,6 +126,18 @@ class Address(APIView):
     @staticmethod
     def get(request):
         return render(request, "addresses.html")
+
+
+class ChangeAddress(APIView):
+    @staticmethod
+    def get(request):
+        return render(request, "change_address.html")
+
+    @staticmethod
+    def post(request):
+        serializer = AddressSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
 
 
 def contact(request):
