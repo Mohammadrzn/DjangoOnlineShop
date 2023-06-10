@@ -1,5 +1,9 @@
 from django.shortcuts import render, get_object_or_404
+from rest_framework.response import Response
+from rest_framework.views import APIView
+from .serializers import CartSerializer
 from .models import Product, Category
+from .cart import Cart
 
 
 def detail(request, pk):
@@ -29,3 +33,48 @@ def category_product(request, pk):
         "category": category,
         "category_products": category_products,
     })
+
+
+class CartShow(APIView):
+    @staticmethod
+    def get(request):
+        return render(request, "cart.html")
+
+
+class CartAddView(APIView):
+    @staticmethod
+    def post(request, product_id):
+        cart = Cart(request)
+        product = get_object_or_404(Product, id=product_id)
+        cart.add(product, quantity=1)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+
+
+class CartMinesView(APIView):
+    @staticmethod
+    def get(request, product_id):
+        cart = Cart(request)
+        product = get_object_or_404(Product, id=product_id)
+        cart.add(product, quantity=-1)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+
+
+class CartRemoveView(APIView):
+    @staticmethod
+    def get(request, product_id):
+        cart = Cart(request)
+        product = get_object_or_404(Product, id=product_id)
+        cart.remove(product)
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
+
+
+class ClearCartView(APIView):
+    @staticmethod
+    def get(request):
+        cart = Cart(request)
+        cart.clear()
+        serializer = CartSerializer(cart)
+        return Response(serializer.data)
