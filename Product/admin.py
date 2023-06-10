@@ -16,4 +16,4 @@ class ProductAdmin(admin.ModelAdmin):
 
 @admin.register(Discount)
 class DiscountAdmin(admin.ModelAdmin):
-    list_display = ["type", "amount", "persian_created_at", "persian_edited_at", "status"]
+    list_display = ["type", "amount", "discount_for", "persian_created_at", "persian_edited_at", "status"]
