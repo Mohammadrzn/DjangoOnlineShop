@@ -63,6 +63,24 @@ class Product(BaseModel):
 
     image_tag.short_description = 'تصویر محصول'
 
+    def total_discount(self):
+        product_discount = 0
+        if self.discount:
+            if self.discount.type == 'c':
+                product_discount += self.discount.amount
+            elif self.discount.type == 'p':
+                product_discount += (self.price * self.discount.amount) / 100
+
+        category_discount = 0
+        if self.category.discount:
+            if self.category.discount.type == 'c':
+                category_discount += self.category.discount.amount
+            elif self.category.discount.type == 'p':
+                category_discount += (self.price * self.category.discount.amount) / 100
+
+        total_discount = product_discount + category_discount
+        return int(total_discount)
+
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "محصولات"
