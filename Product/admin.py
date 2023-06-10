@@ -1,5 +1,5 @@
+from .models import Product, Category, Comment, Discount
 from django.contrib import admin
-from .models import Product, Category, Comment
 
 admin.site.register(Comment)
 
@@ -12,3 +12,8 @@ class CategoryAdmin(admin.ModelAdmin):
 @admin.register(Product)
 class ProductAdmin(admin.ModelAdmin):
     list_display = ["name", "count", "persian_created_at", "persian_edited_at", "image_tag"]
+
+
+@admin.register(Discount)
+class DiscountAdmin(admin.ModelAdmin):
+    list_display = ["type", "amount", "status"]
