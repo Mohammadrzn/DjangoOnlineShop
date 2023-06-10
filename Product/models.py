@@ -6,10 +6,12 @@ from django.core.exceptions import ValidationError
 
 
 class Discount(BaseModel):
-    choice = (('c', 'نقدی'), ('p', 'درصدی'))
-    type = models.CharField("نوع تخفیف", choices=choice, max_length=1, null=True, blank=True)
+    type_choice = (('c', 'نقدی'), ('p', 'درصدی'))
+    discount_for_choice = (("p", "محصول"), ("c", "دسته بندی"), ("u", "مشتری"))
+    type = models.CharField("نوع تخفیف", choices=type_choice, max_length=1, null=True, blank=True)
     amount = models.IntegerField("مقدار تخفیف")
     status = models.BooleanField("تمام شده", default=False)
+    discount_for = models.CharField("تخفیف برای", choices=discount_for_choice, max_length=1, null=True, blank=True)
 
     class Meta:
         verbose_name = "تخفیف"
