@@ -13,6 +13,7 @@ class Discount(BaseModel):
 
     class Meta:
         verbose_name = "تخفیف"
+        verbose_name_plural = "تخفیف ها"
 
     def __str__(self):
         return str(self.amount)
