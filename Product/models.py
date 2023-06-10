@@ -82,6 +82,11 @@ class Product(BaseModel):
         total_discount = product_discount + category_discount
         return int(total_discount)
 
+    def get_price(self):
+        return self.price - self.total_discount()
+
+    get_price.short_description = "قیمت پس از تخفیف"
+
     class Meta:
         ordering = ["name"]
         verbose_name_plural = "محصولات"
