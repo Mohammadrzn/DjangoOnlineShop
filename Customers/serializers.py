@@ -29,3 +29,17 @@ class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
         fields = '__all__'
+
+
+class SendOtpSerializer(serializers.Serializer):
+    mail_phone = serializers.CharField(error_messages={
+        'required': 'وارد کردن این فیلد الزامی',
+        'invalid': 'شماره همراه یا ایمیل معتبر نمی باشد.'
+    })
+
+
+class VerificationSerializer(serializers.Serializer):
+    verification_code = serializers.CharField(max_length=6, error_messages={
+        'required': 'وارد کردن این فیلد الزامی',
+        'max_length': 'کد وارد شده بیش از حد مجاز می باشد.'
+    })
