@@ -1,0 +1,56 @@
+{% extends "base.html" %}
+
+{% block head %}
+
+{% endblock %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl flex items-center justify-center">ورود</h1>
+        <form method="post" action="{% url 'auth:otp' %}" onsubmit="login(event, this)">
+            {% csrf_token %}
+
+            {% if errors %}
+                <ul class="text-red-500">
+                    {% for field_errors in errors.values %}
+                        {% for error in field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="mb-3 flex items-center justify-center">
+                <label for="mail_phone" class="inline-block mb-2">ایمیل یا شماره تلفن</label><br>
+                <input id="mail_phone" class="rounded-xl" type="text" name="mail_phone">
+            </div>
+            <div class="flex items-center justify-center">
+                <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ارسال کد</button>
+            </div>
+            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "auth:signup" %}">ثبت نام کنید</a>
+            </p>
+        </form>
+    </div>
+    <script>
+        async function login(event, el) {
+            event.preventDefault();
+            const formData = new FormData(el);
+            const urlEncodedData = new URLSearchParams(formData).toString();
+
+            const response = await fetch(el.action, {
+                method: el.method,
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: urlEncodedData
+            });
+
+            if (response.status === 200) {
+                window.location.replace("/user/verification/");
+            } else {
+                alert("از صحت شماره یا ایمیل مطمئن شوید");
+            }
+        }
+    </script>
+{% endblock %}
