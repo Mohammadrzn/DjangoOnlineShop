@@ -20,6 +20,7 @@ def send_otp_email(email):
 
 
 @shared_task
-def send_otp_sms(phone_number):
+def send_otp_sms(phone_number, exp_time):
     otp_code = randint(100000, 999999)
-    redis_instance.setex(phone_number, 60, otp_code)
+    print(otp_code)
+    redis_instance.setex(phone_number, exp_time, otp_code)
