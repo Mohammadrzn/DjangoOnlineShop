@@ -41,7 +41,8 @@ class Signup(APIView):
         serializer = CustomerSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-        return redirect("auth:profile")
+
+        return is_authenticated(request)
 
 
 class Login(APIView):
@@ -51,32 +52,7 @@ class Login(APIView):
 
     @staticmethod
     def post(request):
-        username = request.data["username"]
-        password = request.data["password"]
-
-        user = Customer.objects.filter(username=username).first()
-
-        if user is None:
-            raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
-
-        if not user.check_password(password):
-            raise AuthenticationFailed("رمز اشتباه است")
-
-        payload = {
-            "id": user.id,
-            "exp": datetime.datetime.utcnow() + datetime.timedelta(days=10),
-            "iat": datetime.datetime.utcnow()
-        }
-
-        token = jwt.encode(payload, "secret", algorithm="HS256")
-
-        response = HttpResponseRedirect(reverse("auth:profile"))
-        response.set_cookie(key="jwt", value=token, httponly=True)
-        response.data = {
-            "message": "success"
-        }
-
-        return response
+        return is_authenticated(request)
 
 
 class Logout(APIView):
@@ -206,3 +182,32 @@ class Verification(APIView):
                     pass
 
         return render(request, "verification.html", {"serializer": serializer})
+
+
+def is_authenticated(request):
+    username = request.data["username"]
+    password = request.data["password"]
+
+    user = Customer.objects.filter(username=username).first()
+
+    if user is None:
+        raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
+
+    if not user.check_password(password):
+        raise AuthenticationFailed("رمز اشتباه است")
+
+    payload = {
+        "id": user.id,
+        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=10),
+        "iat": datetime.datetime.utcnow()
+    }
+
+    token = jwt.encode(payload, "secret", algorithm="HS256")
+
+    response = HttpResponseRedirect(reverse("auth:profile"))
+    response.set_cookie(key="jwt", value=token, httponly=True)
+    response.data = {
+        "message": "success"
+    }
+
+    return response
