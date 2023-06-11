@@ -1,17 +1,15 @@
-from django.views import View
-import re
-from .serializers import CustomerSerializer, ProfileSerializer, AddressSerializer
-from rest_framework.exceptions import AuthenticationFailed
+from .serializers import CustomerSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
+from rest_framework.exceptions import AuthenticationFailed
+from .tasks import send_otp_email, send_otp_sms
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from django.db.models import Q
-from .tasks import send_otp_email, send_otp_sms
-import redis
 from .models import Customer
-from .forms import VerificationForm, SendOTPForm
 import datetime
+import redis
 import jwt
+import re
 
 
 class ShowProfile(APIView):
@@ -142,3 +140,69 @@ class ChangeAddress(APIView):
 
 def contact(request):
     return render(request, "contact.html")
+
+
+class Otp(APIView):
+    @staticmethod
+    def get(request):
+        serializer = SendOtpSerializer
+        return render(request, 'login_otp.html', {'serializer': serializer})
+
+    @staticmethod
+    def post(request):
+        print("Are we in post method")
+        serializer = SendOtpSerializer(data=request.data)
+        print("Is serializer valid")
+        print(serializer.is_valid())
+        print(serializer.errors)
+        if serializer.is_valid():
+            user = None
+            mail_phone = serializer.validated_data.get('mail_phone')
+            print(mail_phone)
+            if re.match(r'^[A-Za-z0-9]+[-._]*[A-Za-z0-9]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$', mail_phone):
+                try:
+                    user = Customer.objects.get(email=mail_phone)
+                except Customer.DoesNotExist:
+                    pass
+                if user:
+                    send_otp_email.delay(mail_phone)
+                    response = redirect('auth:verification')
+                    response.set_cookie('user_email_or_phone', mail_phone)
+                    return response
+            elif re.match(r'09(\d{9})$', mail_phone):
+                print("BEFORE TRY")
+                print(Customer.objects.values('mobile'))
+                print(type(mail_phone))
+                try:
+                    user = Customer.objects.get(mobile=mail_phone)
+                except Customer.DoesNotExist:
+                    pass
+                if user:
+                    send_otp_sms.delay(mail_phone, 60)
+                    response = redirect('auth:verification')
+                    response.set_cookie('user_email_or_phone', mail_phone)
+                    return response
+
+        return render(request, 'verification.html', {'serializer': serializer})
+
+
+class Verification(APIView):
+    @staticmethod
+    def get(request):
+        serializer = VerificationSerializer()
+        return render(request, "verification.html", {"serializer": serializer})
+
+    @staticmethod
+    def post(request):
+        serializer = VerificationSerializer(request.POST)
+        if serializer.is_valid:
+            verification_code = serializer['verification_code']
+            user_identifier = request.COOKIES.get('user_email_or_phone')
+            r = redis.Redis(host='localhost', port=6379, db=0)
+            stored_code = r.get(user_identifier).decode()
+            if verification_code == stored_code:
+                user = Customer.objects.filter(Q(email=user_identifier) | Q(phone_number=user_identifier)).first()
+                if user:
+                    pass
+
+        return render(request, "verification.html", {"serializer": serializer})
