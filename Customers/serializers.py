@@ -22,7 +22,7 @@ class CustomerSerializer(serializers.ModelSerializer):
 class ProfileSerializer(serializers.ModelSerializer):
     class Meta:
         model = Customer
-        fields = ['id', 'first_name']
+        fields = ['id', 'first_name', 'last_name', 'email', 'mobile', 'telephone', 'national_id', 'age', 'gender']
 
 
 class AddressSerializer(serializers.ModelSerializer):
