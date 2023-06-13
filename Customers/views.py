@@ -42,7 +42,7 @@ class Signup(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
-        return is_authenticated(request)
+        return authenticate(request)
 
 
 class Login(APIView):
@@ -52,7 +52,7 @@ class Login(APIView):
 
     @staticmethod
     def post(request):
-        return is_authenticated(request)
+        return authenticate(request)
 
 
 class Logout(APIView):
@@ -64,6 +64,23 @@ class Logout(APIView):
             "message": "success"
         }
         return redirect("http://127.0.0.1:8000")
+
+
+class Information(APIView):
+    @staticmethod
+    def get(request):
+
+        token = request.COOKIES.get("jwt")
+
+        try:
+            payload = jwt.decode(token, "secret", algorithms=["HS256"])
+            user = Customer.objects.filter(id=payload["id"]).first()
+        except jwt.ExpiredSignatureError:
+            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+
+        return render(request, "information.html", {
+            "user": user,
+        })
 
 
 class Change(APIView):
@@ -184,7 +201,7 @@ class Verification(APIView):
         return render(request, "verification.html", {"serializer": serializer})
 
 
-def is_authenticated(request):
+def authenticate(request):
     username = request.data["username"]
     password = request.data["password"]
 
