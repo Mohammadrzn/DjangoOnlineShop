@@ -16,19 +16,47 @@
                     {% endfor %}
                 </ul>
             {% endif %}
-            {#            <div class="mb-3 flex items-center justify-center">#}
-            {#                <label for="Username" class="inline-block mb-2">نام کاربری</label><br>#}
-            {#                <input id="Username" class="rounded-xl" type="text" name="Username">#}
-            {#            </div>#}
-            {#            <div class="mb-3 flex items-center justify-center">#}
-            {#                <label for="Password" class="inline-block mb-2">رمز</label><br>#}
-            {#                <input id="Password" class="rounded-xl" type="password" name="Password">#}
-            {#                <input type="checkbox" onclick="show_pass()">نمایش رمز#}
-            {#            </div>#}
+            <div class="mb-3 flex items-center justify-center">
+                <label for="Username" class="inline-block mb-2">نام کاربری</label><br>
+                <input id="Username" class="rounded-xl" type="text" name="Username" placeholder="{{ serializer.username }}">
 
+                <label for="Password" class="inline-block mb-2">رمز</label><br>
+                <input id="Password" class="rounded-xl" type="password" name="Password">
+                <input type="checkbox" onclick="show_pass()">نمایش رمز
+            </div>
             <div class="mb-3 flex items-center justify-center">
                 <label for="first_name" class="inline-block mb-2">نام</label><br>
                 <input id="first_name" class="rounded-xl" type="text" name="first_name">
+
+                <label for="last_name" class="inline-block mb-2">نام خانوادگی</label><br>
+                <input id="last_name" class="rounded-xl" type="text" name="last_name">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="email" class="inline-block mb-2">ایمیل</label><br>
+                <input id="email" class="rounded-xl" type="email" name="email">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="mobile" class="inline-block mb-2">موبایل</label><br>
+                <input id="mobile" class="rounded-xl" type="text" name="mobile">
+
+                <label for="telephone" class="inline-block mb-2">تلفن منزل</label><br>
+                <input id="telephone" class="rounded-xl" type="text" name="telephone">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="national_id" class="inline-block mb-2">کد ملی</label><br>
+                <input id="national_id" class="rounded-xl" type="text" name="national_id">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="age" class="inline-block mb-2">سن</label><br>
+                <input id="age" class="rounded-xl" type="text" name="age">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="gender" class="inline-block mb-2">جنسیت</label><br>
+                <select name="gender" id="gender">
+                    <option value="" selected="selected" disabled >جنسیت خود را انتخاب کنید</option>
+                    <option value="M">آقا</option>
+                    <option value="F">خانم</option>
+                </select>
             </div>
             <div class="flex items-center justify-center">
                 <button id="changeSubmit" type="submit"
@@ -45,12 +73,18 @@
                     method: el.method, headers: {"Content-Type": "application/json"},
                     body: JSON.stringify({
                         first_name: el.querySelector("#first_name").value,
+                        last_name: el.querySelector("#last_name").value,
+                        email: el.querySelector("#email").value,
+                        mobile: el.querySelector('#mobile').value,
+                        telephone: el.querySelector('#telephone').value,
+                        national_id: el.querySelector('#national_id').value
+
                     })
                 }
             )
 
             if (response.status === 200) {
-                window.location.replace("/auth/profile/")
+                window.location.replace("/user/profile/")
                 alert("تغییرات با موفقیت ثبت شد")
             } else {
                 alert("Please check your information")
