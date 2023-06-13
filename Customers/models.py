@@ -18,8 +18,8 @@ class Customer(AbstractUser, BaseModel):
     role = models.CharField("نقش", choices=ROLE_CHOICES, max_length=1, default="C", null=False, blank=False)
 
     GENDER_CHOICES = (
-        ("F", "آقا"),
-        ("M", "خانم")
+        ("M", "آقا"),
+        ("F", "خانم")
     )
     gender = models.CharField("جنسیت", choices=GENDER_CHOICES, max_length=1, null=True, blank=True)
 
