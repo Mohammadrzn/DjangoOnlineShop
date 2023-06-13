@@ -132,6 +132,8 @@ class ChangeAddress(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
+        return Response()
+
 
 def contact(request):
     return render(request, "contact.html")
