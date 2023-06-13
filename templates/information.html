@@ -1,0 +1,37 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <style>
+        ul {
+            display: flex;
+            flex-wrap: wrap;
+        }
+
+        li {
+            flex-basis: 50%;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}Change{% endblock %}
+
+{% block content %}
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl flex items-center justify-center">اطلاعات کاربری</h1>
+        <ul>
+            <li>نام کاربری: {% if user.username %}{{ user.username }}{% else %}ثبت نشده{% endif %}</li>
+            <li>نام: {% if user.first_name %}{{ user.first_name }}{% else %}ثبت نشده{% endif %}</li>
+            <li>نام خانوادگی: {% if user.last_name %}{{ user.last_name }}{% else %}ثبت نشده{% endif %}</li>
+            <li>ایمیل: {% if user.email %}{{ user.email }}{% else %}ثبت نشده{% endif %}</li>
+            <li>موبایل: {% if user.mobile %}{{ user.mobile }}{% else %}ثبت نشده{% endif %}</li>
+            <li>تلفن منزل: {% if user.telephone %}{{ user.telephone }}{% else %}ثبت نشده{% endif %}</li>
+            <li>کد ملی: {% if user.national_id %}{{ user.national_id }}{% else %}ثبت نشده{% endif %}</li>
+            <li>سن: {% if user.age %}{{ user.age }}{% else %}ثبت نشده{% endif %}</li>
+            <li>جنسیت: {% if user.gender == "M" %}آقا{% elif user.gender == "F" %}خانم{% else %}ثبت نشده{% endif %}</li>
+        </ul>
+        <div class="flex items-center justify-center">
+            <a href="{% url 'auth:change' %}"
+               class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">تغییر اطلاعات</a>
+        </div>
+    </div>
+{% endblock %}
