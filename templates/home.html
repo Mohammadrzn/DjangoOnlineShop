@@ -23,7 +23,15 @@
                         <div class="p-6 bg-white">
                             <h2 class="text-2xl">{{ product.name }}</h2>
                             <span>قیمت: {{ product.get_price }}تومان </span>
-                            <span class="border bg-red-600 p-1 text-white rounded-full">%{{ product.discount_percent }}</span>
+                            <span class="border bg-red-600 p-1 text-white rounded-full">
+                                {% if discount.discount_for == "p" %}
+                                    {% if discount.type == "p" %}
+                                        %{{ discount.amount }}
+                                    {% elif discount.type == "c" %}
+                                        تومان{{ discount.amount }}
+                                    {% endif %}
+                                {% endif %}
+                            </span>
                             <p class="text-gray-500 line-through px-12">{{ product.price }}</p>
                             {% if product.count <= 5 %}
                                 <p class="text-red-500">فقط {{ product.count }} عدد در انبار باقی مانده</p>
