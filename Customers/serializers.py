@@ -28,7 +28,7 @@ class ProfileSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = '__all__'
+        fields = ['id', 'state', 'city', 'full_address', 'postal_code']
 
 
 class SendOtpSerializer(serializers.Serializer):
