@@ -1,3 +1,5 @@
+from django.views import View
+
 from .serializers import CustomerSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
 from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
 from rest_framework.exceptions import AuthenticationFailed
@@ -113,7 +115,7 @@ class Change(APIView):
             raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
 
 
-class Address(APIView):
+class Address(View):
     @staticmethod
     def get(request):
         return render(request, "addresses.html")
