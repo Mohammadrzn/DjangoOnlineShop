@@ -27,8 +27,7 @@
             تغییر
             اطلاعات کاربری</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
-            <span class="fa fa-bookmark-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">محصولات
-            ذخیره شده</a>
+            <span class="fa fa-bookmark-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">محصولات ذخیره شده</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
             <span class="fa fa-shopping-bag pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">سفارش
             ها</a>
@@ -42,19 +41,23 @@
                                                         style="font-size:17px">خروج</a>
         </div>
         <div style="max-width: 1000px" class="float-child rounded-xl border border-red-500 p-5">
-            <span style="padding-left: 300px">آدرس ها</span>
-            <a style="padding-right: 300px" href="#">test</a><br>
-            <div style="padding-right: 280px" class="float-child pt-10">
-                <span class="fa fa-road pl-2"></span><span>تهران</span><br>
-                <span class="fa fa-road pl-2"></span><span>خیابان آزادی</span><br>
-                <span class="fa fa-envelope-o pl-2"></span><span>مثلا کد پستی</span><br>
-                <span class="fa fa-phone pl-2"></span><span>09123456789</span><br>
-                <span class="fa fa-user-o pl-2"></span><span>محمد</span>
-            </div>
-            <div style="padding-top: 65px" class="float-child pr-5">
-                <a href="#" class="fa fa-plus hover:text-green-600" style="font-size: 25px"></a><br>
-                <a href="#" class="fa fa-trash-o hover:text-red-500" style="font-size: 25px"></a>
-            </div>
+                <span style="padding-left: 300px">آدرس ها</span>
+                <a style="padding-right: 300px" href="#"></a><br>
+            {% if address %}
+                <div style="padding-right: 280px" class="float-child pt-10">
+                    <span class="fa fa-road pl-2"></span><span>{% if address.city %}{{ address.city }}{% else %}ثبت نشده{% endif %}</span><br>
+                    <span class="fa fa-road pl-2"></span><span>{% if address.full_address %}{{ address.full_address }}{% else %}ثبت نشده{% endif %}</span><br>
+                    <span class="fa fa-envelope-o pl-2"></span><span>{% if address.postal_code %}{{ address.postal_code }}{% else %}ثبت نشده{% endif %}</span><br>
+                    <span class="fa fa-phone pl-2"></span><span>{{ user.mobile }}</span><br>
+                    <span class="fa fa-user-o pl-2"></span><span>{{ user.first_name }}</span>
+                </div>
+                <div style="padding-top: 65px" class="float-child pr-5">
+                    <a href="{% url 'auth:change_address' %}" class="fa fa-plus hover:text-green-600" style="font-size: 25px"></a><br>
+                    <a href="#" class="fa fa-trash-o hover:text-red-500" style="font-size: 25px"></a>
+                </div>
+            {% else %}
+                <span>تا کنون آدرسی ثبت نشده است، برای ثبت <a href="{% url 'auth:change_address' %}" class="hover:text-gray-500">کلیک کنید</a></span>
+            {% endif %}
         </div>
     </div>
 {% endblock %}
