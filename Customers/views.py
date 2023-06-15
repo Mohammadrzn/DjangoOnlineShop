@@ -1,16 +1,18 @@
-from django.views import View
-
-from .serializers import CustomerSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
-from django.shortcuts import render, redirect, HttpResponseRedirect, reverse
+from .serializers import LoginSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
 from rest_framework.exceptions import AuthenticationFailed
+from rest_framework_simplejwt.tokens import RefreshToken
 from .tasks import send_otp_email, send_otp_sms
+from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework import status
 from django.db.models import Q
+from django.views import View
 from .models import Customer
+from jwt import encode
+from .mixin import *
 import datetime
 import redis
-import jwt
 import re
 
 
@@ -19,18 +21,10 @@ class ShowProfile(APIView):
     def get(request):
         token = request.COOKIES.get("jwt")
 
-        if not token:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
-
-        try:
-            payload = jwt.decode(token, "secret", algorithms=["HS256"])
-            user = Customer.objects.filter(id=payload["id"]).first()
-            if not user:
-                raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
-
-        return render(request, "profile.html")
+        if token:
+            return render(request, "profile.html")
+        else:
+            return redirect("auth:login")
 
 
 class Signup(APIView):
@@ -40,7 +34,7 @@ class Signup(APIView):
 
     @staticmethod
     def post(request):
-        serializer = CustomerSerializer(data=request.data)
+        serializer = LoginSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
         serializer.save()
 
@@ -48,71 +42,61 @@ class Signup(APIView):
 
 
 class Login(APIView):
+    serializer_class = LoginSerializer
+
     @staticmethod
     def get(request):
         return render(request, "login.html")
 
-    @staticmethod
-    def post(request):
-        return authenticate(request)
+    def post(self, request):
+        serializer = self.serializer_class(data=request.data)
+        if serializer.is_valid():
+            user = serializer.validated_data['user']
+            refresh = RefreshToken.for_user(user)
+            access_token = refresh.access_token
+            response = HttpResponse(status=status.HTTP_200_OK)
+            response.set_cookie('jwt', access_token, httponly=True)
+            return response
+        else:
+            error_message = 'نام کاربری یا رمز عبور اشتباه است'
+            return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 
 class Logout(APIView):
     @staticmethod
     def get(request):
-        response = Response()
+        url = reverse('home')
+        response = HttpResponseRedirect(url)
         response.delete_cookie("jwt")
-        response.data = {
-            "message": "success"
-        }
         return response
 
 
-class Information(APIView):
+class Information(View):
     @staticmethod
     def get(request):
-
-        token = request.COOKIES.get("jwt")
-
-        try:
-            payload = jwt.decode(token, "secret", algorithms=["HS256"])
-            user = Customer.objects.filter(id=payload["id"]).first()
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
-
-        return render(request, "information.html", {
-            "user": user,
-        })
+        return render(request, "information.html")
 
 
 class Change(APIView):
-    @staticmethod
-    def get(request):
-        serializer = ProfileSerializer
-        return render(request, "change.html", {"serializer": serializer})
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.serializer = ProfileSerializer()
 
-    @staticmethod
-    def post(request):
+    def get(self, request):
+        return render(request, "change.html", {"serializer": self.serializer})
+
+    def post(self, request):
         token = request.COOKIES.get("jwt")
+        self.serializer = ProfileSerializer(data=request.data)
 
-        if not token:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
-
-        try:
-            payload = jwt.decode(token, "secret", algorithms=["HS256"])
-            user = Customer.objects.filter(id=payload["id"]).first()
-            if not user:
-                raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
-
-            elif request.method == "POST":
-                serializer = ProfileSerializer(user, data=request.data)
-                if serializer.is_valid():
-                    serializer.save()
-                    return redirect("auth:change")
-                else:
-                    return render(request, "change.html", {"serializer": serializer})
-        except jwt.ExpiredSignatureError:
-            raise AuthenticationFailed("برای دسترسی به این صفحه ابتدا وارد اکانت خود شوید")
+        if token:
+            if self.serializer.is_valid():
+                self.serializer.save()
+                return redirect("auth:information")
+            else:
+                return render(request, "change.html", {"serializer": self.serializer})
+        else:
+            return redirect("auth:login")
 
 
 class Address(View):
@@ -223,7 +207,7 @@ def authenticate(request):
         "iat": datetime.datetime.utcnow()
     }
 
-    token = jwt.encode(payload, "secret", algorithm="HS256")
+    token = encode(payload, "secret", algorithm="HS256")
 
     response = HttpResponseRedirect(reverse("auth:profile"))
     response.set_cookie(key="jwt", value=token, httponly=True)
