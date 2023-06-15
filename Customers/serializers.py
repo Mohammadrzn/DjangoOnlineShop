@@ -1,22 +1,36 @@
+from rest_framework.exceptions import AuthenticationFailed
+from django.contrib.auth import authenticate
 from rest_framework import serializers
 from .models import Customer, Address
+from jwt import decode
 
 
-class CustomerSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Customer
-        fields = ['id', 'username', 'password']
-        extra_kwargs = {
-            "password": {"write_only": True}
+class LoginSerializer(serializers.ModelSerializer):
+    username = serializers.CharField(max_length=255, min_length=3)
+    password = serializers.CharField(max_length=68, min_length=8, write_only=True)
+    tokens = serializers.SerializerMethodField()
+
+    @staticmethod
+    def get_tokens(obj):
+        user = Customer.objects.get(username=obj['username'])
+        return {
+            'refresh': user.tokens()['refresh'],
+            'access': user.tokens()['access']
         }
 
-    def create(self, validated_data):
-        password = validated_data.pop("password", None)
-        instance = self.Meta.model(**validated_data)
-        if password is not None:
-            instance.set_password(password)
-        instance.save()
-        return instance
+    def validate(self, attrs):
+        username = attrs.get('username', '')
+        password = attrs.get('password', '')
+        user = authenticate(username=username, password=password)
+
+        if user is None:
+            raise AuthenticationFailed('Invalid credentials, try again')
+
+        if not user.is_active:
+            raise AuthenticationFailed('Account disabled, contact admin')
+
+        attrs['user'] = user
+        return attrs
 
 
 class ProfileSerializer(serializers.ModelSerializer):
@@ -28,7 +42,18 @@ class ProfileSerializer(serializers.ModelSerializer):
 class AddressSerializer(serializers.ModelSerializer):
     class Meta:
         model = Address
-        fields = ['id', 'state', 'city', 'full_address', 'postal_code']
+        fields = ['id', 'state', 'city', 'full_address', 'postal_code', 'customer']
+
+    def create(self, validated_data):
+        request = self.context['request']
+        token = request.COOKIES.get("jwt")
+        payload = decode(token, "secret", algorithms=["HS256"])
+        customer_id = payload["id"]
+
+        validated_data['customer_id'] = customer_id
+        address = super().create(validated_data)
+
+        return address
 
 
 class SendOtpSerializer(serializers.Serializer):
