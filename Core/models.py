@@ -4,7 +4,7 @@ from jalali_date import datetime2jalali
 
 class BaseModel(models.Model):
     created_at = models.DateTimeField("ایجاد شده در", auto_now_add=True, null=True, blank=True)
-    edited_at = models.DateTimeField("ویراش شده در", null=True, blank=True)
+    edited_at = models.DateTimeField("ویراش شده در", null=True, blank=True, auto_now=True)
     deleted_at = models.DateTimeField("پاک شده در", null=True, blank=True)
     is_deleted = models.BooleanField("حذف شده", default=False, null=False, blank=False)
 
