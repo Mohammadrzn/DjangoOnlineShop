@@ -41,10 +41,6 @@ class Signup(APIView):
 class Login(APIView):
     serializer_class = LoginSerializer
 
-    @staticmethod
-    def get(request):
-        return render(request, "login.html")
-
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
         if serializer.is_valid():
@@ -114,10 +110,6 @@ class ChangeAddress(APIView):
         serializer.save()
 
         return Response()
-
-
-def contact(request):
-    return render(request, "contact.html")
 
 
 class Otp(APIView):
