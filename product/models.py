@@ -51,7 +51,7 @@ class Category(BaseModel):
 class Product(BaseModel):
     category = models.ForeignKey(Category, on_delete=models.DO_NOTHING, related_name="category_product")
     name = models.CharField("نام", max_length=100, null=False, blank=False)
-    price = models.FloatField("قیمت", null=False, blank=False)
+    price = models.IntegerField("قیمت", null=False, blank=False)
     count = models.SmallIntegerField("تعداد باقی مانده", null=False, blank=False)
     brand = models.CharField("برند", max_length=75, null=False, blank=False)
     description = models.TextField("توضیحات", null=False, blank=False)
@@ -66,26 +66,43 @@ class Product(BaseModel):
 
     image_tag.short_description = 'تصویر محصول'
 
+    @property
     def total_discount(self):
+        # Calculate product discount
         product_discount = 0
         if self.discount:
-            if self.discount.type == 'c':
+            if self.discount.type == 'c':  # Cash discount
                 product_discount += self.discount.amount
-            elif self.discount.type == 'p':
+            elif self.discount.type == 'p':  # Percentage discount
                 product_discount += (self.price * self.discount.amount) / 100
 
+        # Calculate category discount
         category_discount = 0
         if self.category.discount:
-            if self.category.discount.type == 'c':
+            if self.category.discount.type == 'c':  # Cash discount
                 category_discount += self.category.discount.amount
             elif self.category.discount.type == 'p':
                 category_discount += (self.price * self.category.discount.amount) / 100
-
+        # Calculate total discount
         total_discount = product_discount + category_discount
         return int(total_discount)
 
+    @property
+    def discount_price(self):
+        # Calculate discounted price
+        discounted_price = self.price - self.total_discount
+
+        # Check if discounted price is negative
+        if discounted_price < 0:
+            raise ValueError("Discounted price cannot be negative.")
+
+        # Check if total discount is greater than 100%
+        if self.total_discount > self.price:
+            raise ValueError("Total discount cannot exceed the price of the product.")
+        return discounted_price
+
     def get_price(self):
-        return self.price - self.total_discount()
+        return self.price - self.total_discount
 
     get_price.short_description = "قیمت پس از تخفیف"
 
