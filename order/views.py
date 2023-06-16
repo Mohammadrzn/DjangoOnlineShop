@@ -2,11 +2,13 @@ from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
 from .serializers import OrderSerializer
+from django.shortcuts import render
+from .models import Order, OrderItems
 from customers.models import Address
 from rest_framework import generics
 from product.models import Product
+from rest_framework import status
 from product.cart import Cart
-from .models import Order, OrderItems
 
 
 class OrderCreateView(generics.CreateAPIView):
@@ -22,11 +24,11 @@ class OrderCreateView(generics.CreateAPIView):
         serializer = self.get_serializer(address)
         return Response(serializer.data)
 
-    def create(self, request, *args, **kwargs):
+    def post(self, request, *args, **kwargs):
         cart = Cart(request)
         customer = self.get_object()
-        address = get_object_or_404(Address, customer=customer)
-
+        address = Address.objects.filter(customer=customer).first()
+        # addresses = Address.objects.filter(customer=customer).all()
         # Check stock availability for all products in the cart
         insufficient_stock = False
         for item in cart:
@@ -36,23 +38,47 @@ class OrderCreateView(generics.CreateAPIView):
             if quantity > product.count:
                 insufficient_stock = True
                 break
-
         if insufficient_stock:
-            return Response({'error': 'موجودی کافی نیست'})
-
+            return Response({'error': 'موجودی کافی نیست'}, status=status.HTTP_400_BAD_REQUEST)
         # Create the order instance
         order = Order.objects.create(customer=customer, address=address)
-
         for item in cart:
             product_data = item['product']
             product = get_object_or_404(Product, pk=product_data['pk'])
             quantity = item['quantity']
-
             if quantity <= product.count:
                 OrderItems.objects.create(order=order, product=product, count=quantity)
-                product.stock -= quantity
+                product.count -= quantity
                 product.save()
-
         cart.clear()
         serializer = self.get_serializer(order)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+
+class OrderDetailView(generics.RetrieveAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def get(self, request, *args, **kwargs):
+        instance = self.get_object()
+        serializer = self.get_serializer(instance)
         return Response(serializer.data)
+
+
+class UpdateStatusView(generics.UpdateAPIView):
+    permission_classes = [IsAuthenticated]
+    queryset = Order.objects.all()
+    serializer_class = OrderSerializer
+
+    def put(self, request, *args, **kwargs):
+        instance = self.get_object()
+        instance.status = True
+        instance.save()
+        serializer = self.get_serializer(instance)
+        return Response(serializer.data)
+
+
+def order(request, id):
+    order = get_object_or_404(Order, pk=id)
+    return render(request, "order.html", {"order": order})
