@@ -5,7 +5,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">ثبت نام</h1>
-        <form id="register-form" method="post" action="{% url 'auth:signup' %}" onsubmit="signup(event, this)">
+        <form id="register-form" method="post" action="{% url 'api:signup' %}" onsubmit="signup(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">

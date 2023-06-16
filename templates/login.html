@@ -9,7 +9,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">ورود</h1>
-        <form method="post" action="{% url 'auth:login' %}" onsubmit="login(event, this)">
+        <form method="post" action="{% url 'api:login' %}" onsubmit="login(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">
@@ -33,7 +33,7 @@
                 <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">وارد شوید</button>
             </div>
             <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "auth:signup" %}" class="hover:text-gray-600">ثبت نام کنید</a></p>
-            <p class="flex items-center justify-center"><a href="{% url 'auth:otp' %}" class="hover:text-gray-600">ورود با رمز یک بار مصرف</a></p>
+            <p class="flex items-center justify-center"><a href="{% url 'api:otp' %}" class="hover:text-gray-600">ورود با رمز یک بار مصرف</a></p>
         </form>
     </div>
     <script>
