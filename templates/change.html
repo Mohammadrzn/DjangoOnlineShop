@@ -5,7 +5,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">تغییر و ثبت اطلاعات کاربر</h1>
-        <form id="chang-form" method="post" action="{% url 'auth:change' %}" onsubmit="change(event, this)">
+        <form id="chang-form" method="post" action="{% url 'api:change' %}" onsubmit="change(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">
@@ -58,10 +58,13 @@
                     <option value="F">خانم</option>
                 </select>
             </div>
-            <div class="flex items-center justify-center">
+            <div class="flex items-center justify-center py-4">
                 <button id="changeSubmit" type="submit"
                         class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ثبت تغییرات
                 </button>
+                <div class="flex items-center justify-center px-4">
+                    <a class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white" href="{% url 'auth:information' %}">مشاهده اطلاعات کاربری</a>
+                </div>
             </div>
         </form>
     </div>

@@ -9,7 +9,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">ورود</h1>
-        <form method="post" action="{% url 'auth:otp' %}" onsubmit="login(event, this)">
+        <form method="post" action="{% url 'api:otp' %}" onsubmit="login(event, this)">
             {% csrf_token %}
 
             {% if errors %}

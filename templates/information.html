@@ -30,7 +30,7 @@
             <li>جنسیت: {% if user.gender == "M" %}آقا{% elif user.gender == "F" %}خانم{% else %}ثبت نشده{% endif %}</li>
         </ul>
         <div class="flex items-center justify-center">
-            <a href="{% url 'auth:change' %}"
+            <a href="{% url 'api:change' %}"
                class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">تغییر اطلاعات</a>
         </div>
     </div>
