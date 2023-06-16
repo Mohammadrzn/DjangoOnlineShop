@@ -7,24 +7,12 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Q
-from django.views import View
 from .models import Customer
 from jwt import encode
 from .mixin import *
 import datetime
 import redis
 import re
-
-
-class ShowProfile(APIView):
-    @staticmethod
-    def get(request):
-        token = request.COOKIES.get("jwt")
-
-        if token:
-            return render(request, "profile.html")
-        else:
-            return redirect("auth:login")
 
 
 class Signup(APIView):
@@ -55,21 +43,6 @@ class Login(APIView):
             return Response({'error': error_message}, status=status.HTTP_400_BAD_REQUEST)
 
 
-class Logout(APIView):
-    @staticmethod
-    def get(request):
-        url = reverse('home')
-        response = HttpResponseRedirect(url)
-        response.delete_cookie("jwt")
-        return response
-
-
-class Information(View):
-    @staticmethod
-    def get(request):
-        return render(request, "information.html")
-
-
 class Change(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
@@ -90,12 +63,6 @@ class Change(APIView):
                 return render(request, "change.html", {"serializer": self.serializer})
         else:
             return redirect("auth:login")
-
-
-class Address(View):
-    @staticmethod
-    def get(request):
-        return render(request, "addresses.html")
 
 
 class ChangeAddress(APIView):
