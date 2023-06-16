@@ -5,7 +5,13 @@ from .models import Customer, Address
 from jwt import decode
 
 
-class LoginSerializer(serializers.ModelSerializer):
+class RegisterSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Customer
+        fields = ['id', 'username', 'password']
+
+
+class LoginSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=255, min_length=3)
     password = serializers.CharField(max_length=68, min_length=8, write_only=True)
     tokens = serializers.SerializerMethodField()
