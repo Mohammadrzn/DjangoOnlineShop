@@ -1,4 +1,4 @@
-from .serializers import LoginSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
+from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from .tasks import send_otp_email, send_otp_sms
@@ -28,17 +28,14 @@ class ShowProfile(APIView):
 
 
 class Signup(APIView):
-    @staticmethod
-    def get(request):
-        return render(request, "signup.html", context={})
+    serializer_class = RegisterSerializer
 
-    @staticmethod
-    def post(request):
-        serializer = LoginSerializer(data=request.data)
+    def post(self, request):
+        user = request.data
+        serializer = self.serializer_class(data=user)
         serializer.is_valid(raise_exception=True)
         serializer.save()
-
-        return authenticate(request)
+        return Response(serializer.data)
 
 
 class Login(APIView):
@@ -131,11 +128,7 @@ class Otp(APIView):
 
     @staticmethod
     def post(request):
-        print("Are we in post method")
         serializer = SendOtpSerializer(data=request.data)
-        print("Is serializer valid")
-        print(serializer.is_valid())
-        print(serializer.errors)
         if serializer.is_valid():
             user = None
             mail_phone = serializer.validated_data.get('mail_phone')
@@ -151,9 +144,6 @@ class Otp(APIView):
                     response.set_cookie('user_email_or_phone', mail_phone)
                     return response
             elif re.match(r'09(\d{9})$', mail_phone):
-                print("BEFORE TRY")
-                print(Customer.objects.values('mobile'))
-                print(type(mail_phone))
                 try:
                     user = Customer.objects.get(mobile=mail_phone)
                 except Customer.DoesNotExist:
@@ -177,14 +167,17 @@ class Verification(APIView):
     def post(request):
         serializer = VerificationSerializer(request.POST)
         if serializer.is_valid:
-            verification_code = serializer['verification_code']
+            verification_code = serializer['verification_code'].value
             user_identifier = request.COOKIES.get('user_email_or_phone')
             r = redis.Redis(host='localhost', port=6379, db=0)
             stored_code = r.get(user_identifier).decode()
             if verification_code == stored_code:
-                user = Customer.objects.filter(Q(email=user_identifier) | Q(phone_number=user_identifier)).first()
+                user = Customer.objects.filter(Q(email=user_identifier) | Q(mobile=user_identifier)).first()
                 if user:
-                    pass
+                    refresh = RefreshToken.for_user(user)
+                    access_token = str(refresh.access_token)
+                    response = redirect('auth:profile')
+                    response.set_cookie('jwt', access_token, httponly=True)
 
         return render(request, "verification.html", {"serializer": serializer})
 
