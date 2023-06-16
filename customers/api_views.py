@@ -18,6 +18,9 @@ import re
 class Signup(APIView):
     serializer_class = RegisterSerializer
 
+    def get(self, request):
+        return render(request, "signup.html")
+
     def post(self, request):
         user = request.data
         serializer = self.serializer_class(data=user)
@@ -28,6 +31,9 @@ class Signup(APIView):
 
 class Login(APIView):
     serializer_class = LoginSerializer
+
+    def get(self, request):
+        return render(request, "login.html")
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -72,9 +78,13 @@ class ChangeAddress(APIView):
 
     @staticmethod
     def post(request):
+        request.data["customer"] = request.user.pk
         serializer = AddressSerializer(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        serializer.save()
+        try:
+            serializer.is_valid(raise_exception=True)
+            serializer.save()
+        except Exception as e:
+            print(e)
 
         return Response()
 
@@ -91,7 +101,6 @@ class Otp(APIView):
         if serializer.is_valid():
             user = None
             mail_phone = serializer.validated_data.get('mail_phone')
-            print(mail_phone)
             if re.match(r'^[A-Za-z0-9]+[-._]*[A-Za-z0-9]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$', mail_phone):
                 try:
                     user = Customer.objects.get(email=mail_phone)
@@ -139,6 +148,29 @@ class Verification(APIView):
                     response.set_cookie('jwt', access_token, httponly=True)
 
         return render(request, "verification.html", {"serializer": serializer})
+
+
+def contact_us(request):
+    return render(request, "contact.html")
+
+
+def profile(request):
+    return render(request, "profile.html")
+
+
+def information(request):
+    return render(request, "information.html")
+
+
+def address(request):
+    return render(request, "addresses.html")
+
+
+def logout(request):
+    url = reverse('home')
+    response = HttpResponseRedirect(url)
+    response.delete_cookie("jwt")
+    return response
 
 
 def authenticate(request):
