@@ -35,7 +35,7 @@ class CategoryTest(TestCase):
 
 class TestProduct(TestCase):
     """
-    class for test creation of Product model and it's methods
+    class for test creation of product model and it's methods
     """
 
     def setUp(self) -> None:
@@ -48,7 +48,7 @@ class TestProduct(TestCase):
 
     def test_create_product(self):
         """
-        test creation of Product model
+        test creation of product model
         """
         self.assertNotEqual(self.product.edited_at, now())
         self.assertNotEqual(self.product.deleted_at, now())
@@ -61,7 +61,7 @@ class TestProduct(TestCase):
 
     def test__str__product(self):
         """
-        test __str__ method of Product model
+        test __str__ method of product model
         """
         self.assertNotEqual(str(self.product), "not_test")
 

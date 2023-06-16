@@ -1,7 +1,7 @@
 from django.db import models
-from Core.models import BaseModel
-from Customers.models import Customer
-from Product.models import Product
+from core.models import BaseModel
+from customers.models import Customer
+from product.models import Product
 
 
 class Order(BaseModel):

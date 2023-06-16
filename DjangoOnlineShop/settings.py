@@ -39,11 +39,11 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
-    'Core.apps.CoreConfig',
-    'Customers',
-    'Product',
+    'core.apps.CoreConfig',
+    'customers',
+    'product',
     'celery',
-    'Order',
+    'order',
     'rest_framework',
 ]
 
@@ -61,7 +61,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'Customers.middleware.middleware.JWTAuthenticationMiddleware',
+    'customers.middleware.middleware.JWTAuthenticationMiddleware',
 ]
 
 ROOT_URLCONF = 'DjangoOnlineShop.urls'
@@ -136,7 +136,7 @@ STATICFILES_DIRS = [BASE_DIR / 'static']
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = "Customers.Customer"
+AUTH_USER_MODEL = "customers.Customer"
 
 CORS_ORIGIN_ALLOW_ALL = True
 CORS_ALLOW_CREDENTIALS = True

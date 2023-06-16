@@ -1,5 +1,5 @@
-from Core.models import BaseModel
-from Customers.models import Customer
+from core.models import BaseModel
+from customers.models import Customer
 from django.db import models
 from django.utils.html import mark_safe
 from django.core.exceptions import ValidationError

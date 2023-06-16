@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from rest_framework.views import APIView
-from Product.models import Product, Category, Discount
+from product.models import Product, Category, Discount
 
 
 class Home(APIView):

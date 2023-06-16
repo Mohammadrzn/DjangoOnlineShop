@@ -1,5 +1,5 @@
 from django.contrib.auth import get_user_model
-from Product.models import Category, Product
+from product.models import Category, Product
 from django.utils.timezone import now
 from django.test import TestCase
 from .models import Order
@@ -7,7 +7,7 @@ from .models import Order
 
 class TestOrder(TestCase):
     """
-    class for test creation of Order model and it's methods
+    class for test creation of order model and it's methods
     """
 
     def setUp(self) -> None:
@@ -22,12 +22,12 @@ class TestOrder(TestCase):
         self.order = Order.objects.create(customer=self.user, registration_date=now(), delivery_date="2023-03-23",
                                           address="test")
         self.order.product.set([self.product])  # set the product in list (set have to iterate on something) for
-        # testing the many-to-many field on Order model
+        # testing the many-to-many field on order model
         self.products = self.order.product.filter(id=self.product.id).exists()
 
     def test_create_order(self):
         """
-        test creation of Order model
+        test creation of order model
         """
         self.assertEqual(self.order.customer, self.user)
         self.assertNotEqual(self.order.registration_date, now())
@@ -37,6 +37,6 @@ class TestOrder(TestCase):
 
     def test__str__order(self):
         """
-        test __str__ method of Order model
+        test __str__ method of order model
         """
         self.assertNotEqual(str(self.order), "test")
