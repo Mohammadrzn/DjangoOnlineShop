@@ -9,7 +9,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">ورود</h1>
-        <form method="post" action="{% url 'auth:verification' %}" onsubmit="login(event, this)">
+        <form method="post" action="{% url 'api:verification' %}" onsubmit="login(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">
@@ -27,7 +27,7 @@
             <div class="flex items-center justify-center">
                 <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">وارد شوید</button>
             </div>
-            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "auth:signup" %}">ثبت نام کنید</a>
+            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "api:signup" %}">ثبت نام کنید</a>
             </p>
         </form>
     </div>
