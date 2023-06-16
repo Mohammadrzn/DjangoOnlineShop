@@ -27,18 +27,26 @@
             border-radius: 25px;
             display: none;
             position: absolute;
-            padding: 1px 15px;
+            padding: 1px 5px;
             background-color: #f1f1f1;
         }
 
         .dropdown-content a {
             color: black;
-            padding: 1px 10px;
+            padding: 1px 5px;
             text-decoration: none;
             display: block;
         }
 
         .dropdown:hover .dropdown-content {
+            display: block;
+        }
+
+        #two {
+            display: none;
+        }
+
+        #one:hover + #two {
             display: block;
         }
     </style>
@@ -71,7 +79,19 @@
         <div class="dropdown px-2 text-lg bg-teal-500 text-white rounded-full hover:bg-teal-700">
             <button class="dropbtn">دسته بندی ها</button>
             <div class="dropdown-content">
-                <a href="#">test</a>
+                {% for category in category %}
+                    <div class="dropdown">
+                        {% if category.upper_category_id == None %}
+                            <a id="one" class="dropbtn border-b border-red-300" href="#">{{ category.name }}</a>
+                        {% endif %}
+                        <div id="two">
+                        <span>{{ category.upper_category_id }}</span>
+                            {% if category.upper_category_id %}
+                                <a class="border-b border-red-300" href="#">{{ category.name }}</a>
+                            {% endif %}
+                        </div>
+                    </div>
+                {% endfor %}
             </div>
         </div>
     </div>
