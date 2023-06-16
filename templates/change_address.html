@@ -6,7 +6,8 @@
 
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
-        <form id="change_address" action="{% url 'auth:change_address' %}" method="post" onsubmit="submit_address(event, this)">
+        <form id="change_address" action="{% url 'api:change_address' %}" method="post"
+              onsubmit="submit_address(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">
@@ -40,11 +41,24 @@
         </form>
     </div>
     <script>
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
         async function submit_address(event, el) {
             event.preventDefault()
             let response = await fetch(
                 el.action, {
-                    method: el.method, headers: {"Content-Type": "application/json"},
+                    method: el.method, headers: {"Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')},
                     body: JSON.stringify({
                         state: el.querySelector("#state").value,
                         city: el.querySelector("#city").value,
@@ -57,9 +71,11 @@
             if (response.status === 200) {
                 window.location.replace("/user/addresses/")
             } else {
-                alert("Please check your information")
+                console.log(response)
 
             }
         }
+
+
     </script>
 {% endblock %}
