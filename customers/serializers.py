@@ -1,14 +1,39 @@
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import authenticate
 from rest_framework import serializers
+from django.contrib.auth.password_validation import validate_password
 from .models import Customer, Address
 from jwt import decode
 
 
 class RegisterSerializer(serializers.ModelSerializer):
+    password_again = serializers.CharField(write_only=True, label="تکرار رمز")
+
     class Meta:
         model = Customer
-        fields = ['id', 'username', 'password']
+        fields = ['id', 'username', 'password', 'password_again']
+        extra_kwargs = {
+            "password": {"write_only": True}
+        }
+
+    @staticmethod
+    def password_validator(pass_1, pass_2):
+        if pass_1 != pass_2:
+            raise serializers.ValidationError({
+                "password": "password field didnt match"
+            })
+        validate_password(pass_1)
+
+    def create(self, validated_data):
+        password = validated_data["password"]
+        password_again = validated_data.pop("password_again")
+        self.password_validator(password, password_again)
+
+        user = super().create(validated_data)
+        user.set_password(password)
+        user.save()
+
+        return user
 
 
 class LoginSerializer(serializers.Serializer):
@@ -51,13 +76,9 @@ class AddressSerializer(serializers.ModelSerializer):
         fields = ['id', 'state', 'city', 'full_address', 'postal_code', 'customer']
 
     def create(self, validated_data):
-        request = self.context['request']
-        token = request.COOKIES.get("jwt")
-        payload = decode(token, "secret", algorithms=["HS256"])
-        customer_id = payload["id"]
-
-        validated_data['customer_id'] = customer_id
-        address = super().create(validated_data)
+        address = Address.objects.create(state=validated_data["state"], city=validated_data["city"],
+                                         full_address=validated_data["full_address"],
+                                         postal_code=validated_data["postal_code"], customer=validated_data["customer"])
 
         return address
 
