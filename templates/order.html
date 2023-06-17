@@ -56,9 +56,16 @@
                             </div>
                             <div class="card-body">
                                 <div class="row">
-                                    <span class="col">{{ order.address.state }} , {{ order.address.city }} ,
-                                        {{ order.address.address }}</span>
-                                    <span class="col">کدپستی : {{ order.address.postal_code }}</span>
+                                    <label for="gender" class="inline-block mb-2">انتخاب آدرس</label><br>
+                                    <select class="rounded-xl border-2 border-gray-400" name="gender" id="gender">
+                                        {% for address in order.customer.addresses.all %}
+                                            {% if address.is_default %}
+                                                <option selected="selected" value="{{ address.id }}">{{ address.full_address }}</option>
+                                            {% else %}
+                                                <option value="{{ address.id }}">{{ address.full_address }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
                                 </div>
                                 <hr>
                             </div>
