@@ -69,11 +69,24 @@
         </form>
     </div>
     <script>
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
         async function change(event, el) {
             event.preventDefault()
             let response = await fetch(
                 el.action, {
-                    method: el.method, headers: {"Content-Type": "application/json"},
+                    method: el.method, headers: {"Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')},
                     body: JSON.stringify({
                         first_name: el.querySelector("#first_name").value,
                         last_name: el.querySelector("#last_name").value,
@@ -87,11 +100,11 @@
             )
 
             if (response.status === 200) {
-                window.location.replace("/user/profile/")
+                window.location.replace("/user/information/")
                 alert("تغییرات با موفقیت ثبت شد")
             } else {
                 alert("Please check your information")
-
+                console.log(response)
             }
         }
 
