@@ -26,10 +26,10 @@ class OrderCreateView(generics.CreateAPIView):
 
     def post(self, request, *args, **kwargs):
         cart = Cart(request)
-        customer = self.get_object()
-        address = Address.objects.filter(customer=customer).first()
-        # addresses = Address.objects.filter(customer=customer).all()
-        # Check stock availability for all products in the cart
+        customer = request.user
+        if not customer:
+            return Response({"detail": "login please"}, status=401)
+        address = Address.objects.filter(customer=customer, is_default=True).first()
         insufficient_stock = False
         for item in cart:
             product_data = item['product']
@@ -40,7 +40,6 @@ class OrderCreateView(generics.CreateAPIView):
                 break
         if insufficient_stock:
             return Response({'error': 'موجودی کافی نیست'}, status=status.HTTP_400_BAD_REQUEST)
-        # Create the order instance
         order = Order.objects.create(customer=customer, address=address)
         for item in cart:
             product_data = item['product']
