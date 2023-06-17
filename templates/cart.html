@@ -94,6 +94,7 @@
                     let cartItemsHTML = '';
                     for (let i = 0; i < cartItems.length; i++) {
                         let item = cartItems[i];
+                        console.log(item.product.pk)
 
                         let itemHTML = '<div class="row">';
                         itemHTML += '<div class="col">' + item.product.name + '</div>';
@@ -107,7 +108,7 @@
                         itemHTML += '<input type="text" class="form-control text-center" value="' + item.quantity +
                             '" id="quantity-' + item.product.id + '">';
                         itemHTML += '<button onclick="incrementQuantity(event, \'' + item.product.pk +
-                            '\')" class="btn btn-outline-secondary" type="button" id="button-plus-' + item.product.id +
+                            '\')" class="btn btn-outline-secondary" type="button" id="button-plus-' + item.product.pk +
                             '">+</button>';
                         itemHTML += '</div>';
                         itemHTML += '</div>';
@@ -160,12 +161,11 @@
 
             let quantityInput = $('#quantity-' + productId);
             let quantity = parseInt(quantityInput.val());
-            if (quantity > 1) {
-                quantity--;
-                quantityInput.val(quantity);
-                updateQuantity(productId, quantity, 'decrement');
-            }
-               renderCart()
+            alert(quantityInput)
+            quantity--;
+            quantityInput.val(quantity);
+            updateQuantity(productId, quantity, 'decrement');
+            renderCart()
 
         }
 
@@ -274,9 +274,6 @@
                 url: '/orders/create/',
                 beforeSend: function (xhr) {
                     xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
-                },
-                data: {
-                    address: 'selected_address_id' // Replace 'selected_address_id' with the actual selected address ID
                 },
                 success: function (response) {
                     console.log(response);
