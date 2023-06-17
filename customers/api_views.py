@@ -59,16 +59,16 @@ class Change(APIView):
 
     def post(self, request):
         token = request.COOKIES.get("jwt")
-        self.serializer = ProfileSerializer(data=request.data)
+        self.serializer = ProfileSerializer(request.user, data=request.data)
 
         if token:
             if self.serializer.is_valid():
                 self.serializer.save()
-                return redirect("auth:information")
+                return Response()
             else:
-                return render(request, "change.html", {"serializer": self.serializer})
+                return Response(self.serializer.errors)
         else:
-            return redirect("auth:login")
+            return redirect("api:login")
 
 
 class ChangeAddress(APIView):
@@ -103,12 +103,12 @@ class Otp(APIView):
             mail_phone = serializer.validated_data.get('mail_phone')
             if re.match(r'^[A-Za-z0-9]+[-._]*[A-Za-z0-9]+@[A-Za-z0-9-]+\.[A-Za-z]{2,}$', mail_phone):
                 try:
-                    user = Customer.objects.get(email=mail_phone)
+                    user = Customer.objects.filter(email=mail_phone).first()
                 except Customer.DoesNotExist:
-                    pass
+                    raise "کاربری با این مشخصات وجود ندارد"
                 if user:
                     send_otp_email.delay(mail_phone)
-                    response = redirect('auth:verification')
+                    response = redirect('api:verification')
                     response.set_cookie('user_email_or_phone', mail_phone)
                     return response
             elif re.match(r'09(\d{9})$', mail_phone):
@@ -118,7 +118,7 @@ class Otp(APIView):
                     pass
                 if user:
                     send_otp_sms.delay(mail_phone, 60)
-                    response = redirect('auth:verification')
+                    response = redirect('api:verification')
                     response.set_cookie('user_email_or_phone', mail_phone)
                     return response
 
@@ -144,8 +144,10 @@ class Verification(APIView):
                 if user:
                     refresh = RefreshToken.for_user(user)
                     access_token = str(refresh.access_token)
-                    response = redirect('auth:profile')
+                    response = redirect('api:profile')
                     response.set_cookie('jwt', access_token, httponly=True)
+
+                    return response
 
         return render(request, "verification.html", {"serializer": serializer})
 
