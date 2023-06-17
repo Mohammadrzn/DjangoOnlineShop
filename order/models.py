@@ -1,6 +1,7 @@
+from customers.models import Customer, Address
 from django.db import models
 from core.models import BaseModel
-from customers.models import Customer
+
 from product.models import Product
 
 
@@ -8,7 +9,7 @@ class Order(BaseModel):
     customer = models.ForeignKey(Customer, null=False, blank=False, on_delete=models.CASCADE)
     registration_date = models.DateTimeField("تاریخ ثبت", auto_now_add=True, null=False, blank=False)
     delivery_date = models.DateField("تاریخ دریافت", null=True, blank=True)
-    address = models.TextField("آدرس", null=False, blank=False)
+    address = models.ForeignKey(Address, verbose_name="آدرس", null=False, blank=False, on_delete=models.CASCADE)
     status = models.BooleanField("وضعیت سفارش", default=False)
     product = models.ManyToManyField(Product, related_name="order_product")
 
