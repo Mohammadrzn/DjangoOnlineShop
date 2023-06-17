@@ -23,16 +23,18 @@ class OrderItemsSerializer(serializers.ModelSerializer):
         fields = ['id', 'order', 'product', 'count']
 
 
+class AddressSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Address
+        fields = '__all__'
+
+
 class OrderSerializer(serializers.ModelSerializer):
     customer = CustomerSerializer()
     order_items = OrderItemsSerializer(many=True, read_only=True)
+    address = AddressSerializer()
 
     class Meta:
         model = Order
         fields = ['id', 'customer', 'address', 'status', 'order_items']
 
-
-class AddressSerializer(serializers.ModelSerializer):
-    class Meta:
-        model = Address
-        fields = '__all__'
