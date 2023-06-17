@@ -28,15 +28,19 @@ class Customer(AbstractUser, BaseModel):
         verbose_name_plural = "کاربران"
 
     def __str__(self):
-        return f"{self.first_name} {self.last_name}"
+        if self.first_name and self.last_name:
+            return f"{self.first_name} {self.last_name}"
+        else:
+            return self.username
 
 
 class Address(BaseModel):
-    customer = models.ForeignKey(Customer, on_delete=models.CASCADE)
+    customer = models.ForeignKey(Customer, on_delete=models.CASCADE, related_name='addresses', related_query_name='address')
     state = models.CharField("استان", max_length=75, null=False, blank=False)
     city = models.CharField("شهر", max_length=100, null=False, blank=False)
     full_address = models.TextField("آدرس", help_text="آدرس کامل همراه با شماره پلاک و واحد", null=False, blank=False)
     postal_code = models.SmallIntegerField("کد پستی", null=False, blank=False)
+    is_default = models.BooleanField("آدرس پیش فرض", null=True, blank=True)
     is_deleted = None
 
     class Meta:
