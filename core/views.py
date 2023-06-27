@@ -7,7 +7,7 @@ class Home(View):
     @staticmethod
     def get(request):
         new_products = Product.objects.filter(count__gt=0, discount_id=None)[0:6]
-        discount_product = Product.objects.filter(count__gt=0, discount=True)
+        discount_product = Product.objects.filter(count__gt=0, discount__isnull=False)
         discount = Discount.objects.get(discount_for="p")
         category = Category.objects.values()
 
