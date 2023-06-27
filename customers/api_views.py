@@ -5,9 +5,9 @@ from .tasks import send_otp_email, send_otp_sms
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from .models import Customer, Address
 from rest_framework import status
 from django.db.models import Q
-from .models import Customer
 from jwt import encode
 from .mixin import *
 import datetime
@@ -165,7 +165,8 @@ def information(request):
 
 
 def address(request):
-    return render(request, "addresses.html")
+    address = Address.objects.values()
+    return render(request, "addresses.html", {"address": address})
 
 
 def logout(request):
