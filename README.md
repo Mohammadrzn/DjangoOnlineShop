@@ -26,7 +26,7 @@ Categories and products can have discounts
 
 
 ## Setup
-First set an virtual environment:
+First create an virtual environment:
 ```
 python3 -m venv venv
 ```
