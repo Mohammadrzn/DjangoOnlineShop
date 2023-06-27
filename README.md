@@ -54,3 +54,25 @@ Run the project:
 ```
 python manage.py runserver
 ```
+In a second terminal run this to install redis tools (we are going to use it as a message broker to send OTP codes)
+```
+sudo apt install redis-tools
+```
+Then install redis server
+```
+sudo apt install redis-server
+```
+First run redis server
+```
+redis-server
+```
+And then redis cli (If everythin is okay, when you write "ping" in redis terminal it should responde "PONG")
+```
+redis-cli
+```
+In a third terminal this command to activate celery
+```
+python -m celery -A customers worker -l info
+```
+
+now go to http://127.0.0.1:8000/ and enjoy the shop
