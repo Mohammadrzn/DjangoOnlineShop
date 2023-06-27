@@ -28,25 +28,25 @@ $ python3 -m venv venv
 ```
 Activate the virtual environment:
 ```
-$ source venv/bin/activate
+source venv/bin/activate
 ```
 Then install requirements from requirements.txt:
 ```
-$ pip install -r requirements.txt
+pip install -r requirements.txt
 ```
 Make migrations to create python codes for creating database from models.py:
-'''
-$ python manage.py makemigrations
-'''
+```
+python manage.py makemigrations
+```
 Create data base from migration files:
-'''
-$ python manage.py migrate
+```
+python manage.py migrate
 ```
 Create superuser for online shop:
 ```
-$ python manage.py createsuperuser
+python manage.py createsuperuser
 ```
 Run the project:
 ```
-$ python manage.py runserver
+python manage.py runserver
 ```
