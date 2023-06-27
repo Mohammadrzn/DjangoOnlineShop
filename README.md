@@ -19,6 +19,7 @@ Categories and products can have discounts
 * PyJWT: 2.7.0
 * pytz: 2023.3
 * redis: 4.5.5
+
 for more see requirements.txt
 
 ## Setup
