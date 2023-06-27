@@ -24,7 +24,7 @@ for more see requirements.txt
 ## Setup
 First set an virtual environment:
 ```
-$ python3 -m venv venv
+python3 -m venv venv
 ```
 Activate the virtual environment:
 ```
