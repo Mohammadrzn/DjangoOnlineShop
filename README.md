@@ -1,10 +1,12 @@
 # Django Online Shop
 
+
 ## Introduction
 An online shop with python and django. Customers can access site, add products to cart and see cart but for the payment, they should login
 Default login method is with user and password and it works with JWT, but they can use OTP code with email or mobile number
 Customers can have default address and can select between addresses on payment
 Categories and products can have discounts
+
 
 ## Technologies
 * celer: 5.2.7
@@ -20,7 +22,8 @@ Categories and products can have discounts
 * pytz: 2023.3
 * redis: 4.5.5
 
-for more see requirements.txt
+  for more see requirements.txt
+
 
 ## Setup
 First set an virtual environment:
