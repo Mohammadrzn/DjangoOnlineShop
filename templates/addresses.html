@@ -1,0 +1,71 @@
+{% extends "base.html" %}
+
+{% block head %}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <style>
+        .float-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .float-child {
+            float: right;
+        }
+    </style>
+{% endblock %}
+
+{% block title %}addresses{% endblock %}
+
+{% block content %}
+    <div class="float-container">
+        <div style="max-width: 265px" class="ml-10 float-child rounded-xl border border-red-500 p-2">
+            <p class="py-4 text-center" style="font-size:20px">خوش آمدید {{ user.username }}</p>
+            <hr class="h-px my-4 bg-yellow-500 border-0">
+            <span class="fa fa-user-o pl-2 mt-5"></span><a href="{% url 'api:change' %}" class="hover:text-gray-500"
+                                                           style="font-size:17px">مشاهده و
+            تغییر
+            اطلاعات کاربری</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-bookmark-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">محصولات
+            ذخیره شده</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-shopping-bag pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">سفارش
+            ها</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-comment-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">دیدگاها</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-building-o pl-2"></span><a href="{% url 'api:addresses' %}" class="hover:text-gray-500"
+                                                          style="font-size:17px">آدرس ها</a>
+            <hr class="h-px my-2 bg-gray-300 border-0">
+            <span class="fa fa-sign-out pl-2"></span><a href="{% url 'api:logout' %}" class="hover:text-gray-500"
+                                                        style="font-size:17px">خروج</a>
+        </div>
+        <div style="max-width: 1000px" class="float-child rounded-xl border border-red-500 p-5">
+            <span style="padding-left: 300px">آدرس ها</span>
+            <a style="padding-right: 300px" href="#"></a><br>
+            {% if address %}
+                {% for address in address %}
+                    <div style="padding-right: 280px" class="float-child pt-10">
+                        <span class="fa fa-road pl-2"></span><span>{% if address.city %}{{ address.city }}{% else %}ثبت
+                        نشده{% endif %}</span><br>
+                        <span class="fa fa-road pl-2"></span><span>{% if address.full_address %}
+                        {{ address.full_address }}{% else %}ثبت نشده{% endif %}</span><br>
+                        <span class="fa fa-envelope-o pl-2"></span><span>{% if address.postal_code %}
+                        {{ address.postal_code }}{% else %}ثبت نشده{% endif %}</span><br>
+                        <span class="fa fa-phone pl-2"></span><span>{{ user.mobile }}</span><br>
+                        <span class="fa fa-user-o pl-2"></span><span>{{ user.first_name }}</span>
+                    </div>
+                    <div style="padding-top: 65px" class="float-child pr-5">
+                        <a href="{% url 'api:change_address' %}" class="fa fa-plus hover:text-green-600"
+                           style="font-size: 25px"></a><br>
+                        <a href="#" class="fa fa-trash-o hover:text-red-500" style="font-size: 25px"></a>
+                    </div>
+                {% endfor %}
+            {% else %}
+                <span>تا کنون آدرسی ثبت نشده است، برای ثبت <a href="{% url 'api:change_address' %}"
+                                                              class="hover:text-gray-500">کلیک کنید</a></span>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

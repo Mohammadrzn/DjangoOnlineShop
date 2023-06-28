@@ -9,7 +9,7 @@
 {% block content %}
     <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
         <h1 class="mb-6 text-3xl flex items-center justify-center">ورود</h1>
-        <form method="post" action="{% url 'api:login' %}" onsubmit="login(event, this)">
+        <form method="post" action="{% url 'api:verification' %}" onsubmit="login(event, this)">
             {% csrf_token %}
             {% if errors %}
                 <ul class="text-red-500">
@@ -21,19 +21,14 @@
                 </ul>
             {% endif %}
             <div class="mb-3 flex items-center justify-center">
-                <label for="loginUserName" class="inline-block mb-2">نام کاربری</label><br>
-                <input id="loginUserName" class="rounded-xl" type="text" name="username">
-            </div>
-            <div class="mb-3 flex items-center justify-center">
-                <label for="loginPassword" class="inline-block mb-2">رمز</label><br>
-                <input id="loginPassword" class="rounded-xl" type="password" name="password">
-                <input type="checkbox" onclick="show_pass()">نمایش رمز
+                <label for="verification_code" class="inline-block mb-2">کد</label><br>
+                <input id="verification_code" class="rounded-xl" type="text" name="verification_code">
             </div>
             <div class="flex items-center justify-center">
                 <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">وارد شوید</button>
             </div>
-            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "api:signup" %}" class="hover:text-gray-600">ثبت نام کنید</a></p>
-            <p class="flex items-center justify-center"><a href="{% url 'api:otp' %}" class="hover:text-gray-600">ورود با رمز یک بار مصرف</a></p>
+            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "api:signup" %}">ثبت نام کنید</a>
+            </p>
         </form>
     </div>
     <script>
@@ -53,16 +48,7 @@
             if (response.status === 200) {
                 window.location.replace("/user/profile/");
             } else {
-                alert("نام کاربری یا رمز اشتباه است");
-            }
-        }
-
-        function show_pass() {
-            let x = document.getElementById("loginPassword");
-            if (x.type === "password") {
-                x.type = "text";
-            } else {
-                x.type = "password";
+                alert("کد وارد شده اشتباه است، یا منقضیی شده");
             }
         }
     </script>

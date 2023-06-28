@@ -1,0 +1,150 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+    <div class="container py-5">
+        <div class="jumbotron">
+            <div class="container my-5">
+                <h2 class="text-center mb-5">سفارش شما</h2>
+                <div class="row">
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <div class="row">
+                                    <div class="col">نام محصول</div>
+                                    <div class="col">قیمت واحد</div>
+                                    <div class="col">تعداد</div>
+                                    <div class="col">تخفیف</div>
+                                    <div class="col">قیمت نهایی</div>
+                                </div>
+                            </div>
+                            <div class="card-body cart-items" id="order-items">
+                                <!-- Order items will be dynamically loaded here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-header">
+                                جزئیات سفارش
+                            </div>
+                            <div class="card-body col-lg-12">
+                                <ul class="list-group col-lg-12">
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        جمع کل فاکتور
+                                        <p>{{ order.total_price }} تومان</p>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        جمع تخفیف
+                                        <p>{{ order.total_discount }} تومان</p>
+                                    </li>
+                                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                                        مبلغ قابل پرداخت
+                                        <span>{{ order.total_payment }} تومان</span>
+                                    </li>
+                                </ul>
+                                <button id="payment-button" class="btn btn-success btn-block mt-3" data-url="{% url 'orders:update_status' order.id %}">پرداخت</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-md-8">
+                        <div class="card">
+                            <div class="card-header">
+                                آدرس تحویل سفارش
+                            </div>
+                            <div class="card-body">
+                                <div class="row">
+                                    <label for="gender" class="inline-block mb-2">انتخاب آدرس</label><br>
+                                    <select class="rounded-xl border-2 border-gray-400" name="gender" id="gender">
+                                        {% for address in order.customer.addresses.all %}
+                                            {% if address.is_default %}
+                                                <option selected="selected" value="{{ address.id }}">{{ address.full_address }}</option>
+                                            {% else %}
+                                                <option value="{{ address.id }}">{{ address.full_address }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                                <hr>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div id="result"></div>
+
+    <script>
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                let cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    let cookie = cookies[i].trim();
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                type: 'GET',
+                url: '/orders/details/{{ order.id }}/',  // Replace with your API endpoint URL
+                beforeSend: function (xhr) {
+                    xhr.setRequestHeader('X-CSRFToken', getCookie('csrftoken'));
+                },
+                success: function (response) {
+                    let items = response.order_items;
+                    console.log(items)
+                    let html = '';
+                    for (let i = 0; i < items.length; i++) {
+                        html += '<div class="row">';
+                        html += '<div class="col">' + items[i].product.name + '</div>';
+                        html += '<div class="col">' + items[i].product.price + '</div>';
+                        html += '<div class="col">' + items[i].count + '</div>';
+                        html += '<div class="col">' + items[i].product.total_discount + '</div>';
+                        html += '<div class="col">' + items[i].product.discount_price + '</div>';
+                        html += '</div>';
+                        html += '<hr>';
+                    }
+                    $('#order-items').html(html);
+                },
+                error: function (xhr, status, error) {
+                    console.log(xhr.responseText);
+                }
+            });
+
+            $('#payment-button').click(function (e) {
+                e.preventDefault(); // Prevent default button click behavior
+
+                let url = $(this).data('url');
+                let csrfToken = getCookie('csrftoken');
+
+                $.ajax({
+                    type: 'PUT',
+                    url: url,  // Use the provided data-url attribute
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader('X-CSRFToken', csrfToken);
+                    },
+                    success: function (response) {
+                        // Handle success response
+                        console.log(response);
+                        window.location.replace("127.0.0.1:8000")
+                    },
+                    error: function (xhr, status, error) {
+                        // Handle error response
+                        console.log(xhr.responseText);
+                    }
+                });
+            });
+        });
+    </script>
+{% endblock content %}

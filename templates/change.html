@@ -1,0 +1,120 @@
+{% extends "base.html" %}
+
+{% block title %}Change{% endblock %}
+
+{% block content %}
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <h1 class="mb-6 text-3xl flex items-center justify-center">تغییر و ثبت اطلاعات کاربر</h1>
+        <form id="chang-form" method="post" action="{% url 'api:change' %}" onsubmit="change(event, this)">
+            {% csrf_token %}
+            {% if errors %}
+                <ul class="text-red-500">
+                    {% for field_errors in errors.values %}
+                        {% for error in field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="mb-3 flex items-center justify-center">
+                <label for="Username" class="inline-block mb-2">نام کاربری</label><br>
+                <input id="Username" class="rounded-xl" type="text" name="Username" placeholder="{{ serializer.username }}">
+
+                <label for="Password" class="inline-block mb-2">رمز</label><br>
+                <input id="Password" class="rounded-xl" type="password" name="Password">
+                <input type="checkbox" onclick="show_pass()">نمایش رمز
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="first_name" class="inline-block mb-2">نام</label><br>
+                <input id="first_name" class="rounded-xl" type="text" name="first_name">
+
+                <label for="last_name" class="inline-block mb-2">نام خانوادگی</label><br>
+                <input id="last_name" class="rounded-xl" type="text" name="last_name">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="email" class="inline-block mb-2">ایمیل</label><br>
+                <input id="email" class="rounded-xl" type="email" name="email">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="mobile" class="inline-block mb-2">موبایل</label><br>
+                <input id="mobile" class="rounded-xl" type="text" name="mobile">
+
+                <label for="telephone" class="inline-block mb-2">تلفن منزل</label><br>
+                <input id="telephone" class="rounded-xl" type="text" name="telephone">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="national_id" class="inline-block mb-2">کد ملی</label><br>
+                <input id="national_id" class="rounded-xl" type="text" name="national_id">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="age" class="inline-block mb-2">سن</label><br>
+                <input id="age" class="rounded-xl" type="text" name="age">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="gender" class="inline-block mb-2">جنسیت</label><br>
+                <select class="rounded-xl border-2 border-gray-400" name="gender" id="gender">
+                    <option value="" selected="selected" disabled >جنسیت خود را انتخاب کنید</option>
+                    <option value="M">آقا</option>
+                    <option value="F">خانم</option>
+                </select>
+            </div>
+            <div class="flex items-center justify-center py-4">
+                <button id="changeSubmit" type="submit"
+                        class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ثبت تغییرات
+                </button>
+                <div class="flex items-center justify-center px-4">
+                    <a class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white" href="{% url 'api:profile' %}">مشاهده اطلاعات کاربری</a>
+                </div>
+            </div>
+        </form>
+    </div>
+    <script>
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+        async function change(event, el) {
+            event.preventDefault()
+            let response = await fetch(
+                el.action, {
+                    method: el.method, headers: {"Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')},
+                    body: JSON.stringify({
+                        first_name: el.querySelector("#first_name").value,
+                        last_name: el.querySelector("#last_name").value,
+                        email: el.querySelector("#email").value,
+                        mobile: el.querySelector('#mobile').value,
+                        telephone: el.querySelector('#telephone').value,
+                        national_id: el.querySelector('#national_id').value
+
+                    })
+                }
+            )
+
+            if (response.status === 200) {
+                window.location.replace("/user/information/")
+                alert("تغییرات با موفقیت ثبت شد")
+            } else {
+                alert("Please check your information")
+                console.log(response)
+            }
+        }
+
+        function show_pass() {
+            let x = document.getElementById("password");
+            if (x.type === "password") {
+                x.type = "text";
+            } else {
+                x.type = "password";
+            }
+        }
+    </script>
+{% endblock %}

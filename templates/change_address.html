@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block head %}{% endblock %}
+
+{% block title %}change addresses{% endblock %}
+
+{% block content %}
+    <div class="w-1/2 my-6 mx-auto p-6 bg-gray-100 rounded-xl">
+        <form id="change_address" action="{% url 'api:change_address' %}" method="post"
+              onsubmit="submit_address(event, this)">
+            {% csrf_token %}
+            {% if errors %}
+                <ul class="text-red-500">
+                    {% for field_errors in errors.values %}
+                        {% for error in field_errors %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    {% endfor %}
+                </ul>
+            {% endif %}
+            <div class="mb-3 flex items-center justify-center">
+                <label for="state" class="inline-block mb-2">استان</label><br>
+                <input id="state" class="rounded-xl" type="text" name="state">
+
+                <label for="city" class="inline-block mb-2">شهر</label><br>
+                <input id="city" class="rounded-xl" type="text" name="city">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="full_address" class="inline-block mb-2">آدرس کامل</label><br>
+                <input id="full_address" class="rounded-xl" type="text" name="full_address">
+            </div>
+            <div class="mb-3 flex items-center justify-center">
+                <label for="postal_code" class="inline-block mb-2">کد پستی</label><br>
+                <input id="postal_code" class="rounded-xl" type="text" name="postal_code">
+            </div>
+            <div class="flex items-center justify-center">
+                <button id="change_address" type="submit"
+                        class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">ثبت آدرس
+                </button>
+            </div>
+        </form>
+    </div>
+    <script>
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) c_end = document.cookie.length;
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return "";
+        }
+
+        async function submit_address(event, el) {
+            event.preventDefault()
+            let response = await fetch(
+                el.action, {
+                    method: el.method, headers: {"Content-Type": "application/json", "X-CSRFToken": getCookie('csrftoken')},
+                    body: JSON.stringify({
+                        state: el.querySelector("#state").value,
+                        city: el.querySelector("#city").value,
+                        full_address: el.querySelector("#full_address").value,
+                        postal_code: el.querySelector("#postal_code").value,
+                    })
+                }
+            )
+
+            if (response.status === 200) {
+                window.location.replace("/user/addresses/")
+            } else {
+                console.log(response)
+
+            }
+        }
+
+
+    </script>
+{% endblock %}
