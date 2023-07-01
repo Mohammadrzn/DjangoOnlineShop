@@ -8,12 +8,12 @@ from .models import Order, Carts
 
 class TestOrder(TestCase):
     """
-    Unittest class for test creation of order model and it's methods
+    Unittest class for testing the creation of Order model and its methods.
     """
 
     def setUp(self) -> None:
         """
-        creating the models requirements for testing
+        Set up the models required for testing.
         """
         self.user = get_user_model().objects.create_user(edited_at=now(), deleted_at=now(), password="test",
                                                          username="test_username", role="C")
@@ -31,7 +31,7 @@ class TestOrder(TestCase):
 
     def test_create_order(self):
         """
-        test creation of order model
+        Test the creation of the Order model.
         """
         self.assertEqual(self.order.customer, self.user)
         self.assertNotEqual(self.order.registration_date, now())
@@ -42,19 +42,19 @@ class TestOrder(TestCase):
 
     def test__str__order(self):
         """
-        test __str__ method of order model
+        Test the __str__ method of the Order model.
         """
         self.assertNotEqual(str(self.order), "test")
 
 
 class TestCart(TestCase):
     """
-    Unittest class for test creation of cart model and it's methods
+    Unittest class for testing the creation of Cart model and its methods.
     """
 
     def setUp(self) -> None:
         """
-        creating the models requirements for testing
+        Set up the models required for testing.
         """
         self.user = get_user_model().objects.create_user(edited_at=now(), deleted_at=now(), password="test_password",
                                                          username="test_username", role="C")
@@ -67,7 +67,7 @@ class TestCart(TestCase):
 
     def test_creat_cart(self):
         """
-        test creation of cart model
+        Test the creation of the Cart model.
         """
         self.assertEqual(self.cart.customer, self.user)
         expected_products = [repr(self.product)]
