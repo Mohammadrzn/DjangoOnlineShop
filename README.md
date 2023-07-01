@@ -2,10 +2,15 @@
 
 
 ## Introduction
-An online shop with python and django. Customers can access site, add products to cart and see cart but for the payment, they should login
-Default login method is with user and password and it works with JWT, but they can use OTP code with email or mobile number
+An online shop with python and django. Customers can access site, add products to cart and see cart but for the payment, they should log in
+Default login method is with user and password, and it works with JWT, but they can use OTP code with email or mobile number
 Customers can have default address and can select between addresses on payment
 Categories and products can have discounts
+
+
+## Some features of project
+* models Unittest
+* debug and info log levels (writen on file and terminal)
 
 
 ## Technologies
@@ -26,7 +31,7 @@ Categories and products can have discounts
 
 
 ## Setup
-First create an virtual environment:
+First create a virtual environment:
 ```
 python3 -m venv venv
 ```
@@ -66,7 +71,7 @@ First run redis server
 ```
 redis-server
 ```
-And then redis cli (If everythin is okay, when you write "ping" in redis terminal it should responde "PONG")
+And then redis cli (If everything is okay, when you write "ping" in redis terminal it should return "PONG")
 ```
 redis-cli
 ```
