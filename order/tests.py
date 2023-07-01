@@ -44,7 +44,7 @@ class TestOrder(TestCase):
         """
         Test the __str__ method of the Order model.
         """
-        self.assertNotEqual(str(self.order), "test")
+        self.assertEqual(str(self.order), self.user.username)
 
 
 class TestCart(TestCase):
@@ -72,3 +72,9 @@ class TestCart(TestCase):
         self.assertEqual(self.cart.customer, self.user)
         expected_products = [repr(self.product)]
         self.assertQuerysetEqual(self.cart.product.all(), expected_products, transform=repr)
+
+    def test__str__cart(self):
+        """
+        Test the __str__ method of the Cart model.
+        """
+        self.assertEqual(str(self.cart), f"{self.user.get_full_name}سبد ")
