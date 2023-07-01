@@ -11,6 +11,8 @@ Categories and products can have discounts
 ## Some features of project
 * models Unittest
 * debug and info log levels (writen on file and terminal)
+* JWT authentication
+* OTP code authentication via Email and phone number
 
 
 ## Technologies
