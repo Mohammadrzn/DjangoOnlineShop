@@ -1,9 +1,9 @@
+from .models import Order, Carts, CartItems, OrderItems
 from django.contrib.auth import get_user_model
 from product.models import Category, Product
 from django.utils.timezone import now
 from customers.models import Address
 from django.test import TestCase
-from .models import Order, Carts
 
 
 class TestOrder(TestCase):
@@ -78,3 +78,37 @@ class TestCart(TestCase):
         Test the __str__ method of the Cart model.
         """
         self.assertEqual(str(self.cart), f"{self.user.get_full_name}سبد ")
+
+
+class TestCartItem(TestCase):
+    """
+    Unittest class for testing the creation of CartItems model and its methods.
+    """
+
+    def setUp(self) -> None:
+        """
+        Set up the models required for testing.
+        """
+        self.user = get_user_model().objects.create_user(edited_at=now(), deleted_at=None, password="test_password",
+                                                         username="test_username", role="C")
+        self.category = Category.objects.create(name="test", created_at=now(), edited_at=now(), deleted_at=None)
+        self.product = Product.objects.create(category=self.category, name="test", price=120.5, count=5, brand="test",
+                                              description="test")
+        self.cart = Carts.objects.create(customer=self.user)
+        self.cart.product.set([self.product], through_defaults={'count': 1})
+        self.products = self.cart.product.filter(id=self.product.id).exists()
+        self.cart_items = CartItems.objects.create(cart=self.cart, count=7, product=self.product)
+
+    def test_create_cartItems(self):
+        """
+        Test the creation of the CartItems model.
+        """
+        self.assertEqual(self.cart_items.cart, self.cart)
+        self.assertEqual(self.cart_items.count, 7)
+        self.assertEqual(self.cart_items.product, self.product)
+
+    def test__str__cartItems(self):
+        """
+        Test the __str__ method of the CartItems model.
+        """
+        self.assertEqual(str(self.cart_items), self.product.name)
