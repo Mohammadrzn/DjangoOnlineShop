@@ -32,7 +32,22 @@ Categories and products can have discounts
   for more see requirements.txt
 
 
-## Setup
+## Setup (with Docker)
+First create a docker image:
+```
+docker build -t django-online-shop .
+```
+Check if the image created successfully (you should see the image named django-online-shop):
+```
+docker image ls
+```
+Run the project via docker:
+```
+docker run django-online-shop
+```
+
+
+## Setup (without Docker)
 First create a virtual environment:
 ```
 python3 -m venv venv
