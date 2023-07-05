@@ -6,7 +6,7 @@ admin.site.register([Carts])
 
 
 @admin.register(Order)
-class CategoryAdmin(admin.ModelAdmin):
+class OrderAdmin(admin.ModelAdmin):
     list_display = ["customer", "persian_created_at", "persian_edited_at", "persian_deleted_at"]
 
 
