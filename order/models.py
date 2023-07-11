@@ -1,8 +1,8 @@
-from customers.models import Customer, Address
 from django.db import models
-from core.models import BaseModel
 
+from customers.models import Customer, Address
 from product.models import Product
+from core.models import BaseModel
 
 
 class Order(BaseModel):

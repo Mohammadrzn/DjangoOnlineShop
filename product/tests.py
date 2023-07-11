@@ -1,7 +1,8 @@
-from django.test import TestCase
-from django.utils.timezone import now
-from .models import Category, Product, Comment
 from django.contrib.auth import get_user_model
+from django.utils.timezone import now
+from django.test import TestCase
+
+from .models import Category, Product, Comment
 
 
 class CategoryTest(TestCase):

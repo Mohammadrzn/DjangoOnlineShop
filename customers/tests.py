@@ -2,6 +2,7 @@ from django.contrib.auth.hashers import check_password
 from django.contrib.auth import get_user_model
 from django.utils.timezone import now
 from django.test import TestCase
+
 from .models import Address
 
 

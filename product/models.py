@@ -1,8 +1,9 @@
-from core.models import BaseModel
-from customers.models import Customer
-from django.db import models
-from django.utils.html import mark_safe
 from django.core.exceptions import ValidationError
+from django.utils.html import mark_safe
+from django.db import models
+
+from customers.models import Customer
+from core.models import BaseModel
 
 
 class Discount(BaseModel):

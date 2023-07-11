@@ -1,22 +1,24 @@
-from .serializers import RegisterSerializer, LoginSerializer, ProfileSerializer, AddressSerializer, SendOtpSerializer, VerificationSerializer
+import datetime
+import re
+
 from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
-from .tasks import send_otp_email, send_otp_sms
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from .models import Customer, Address
 from rest_framework import status
 from django.db.models import Q
 from jwt import encode
 from .mixin import *
-import datetime
 import redis
-import re
+
+from .tasks import send_otp_email, send_otp_sms
+from .models import Customer, Address
+from . import serializers
 
 
 class Signup(APIView):
-    serializer_class = RegisterSerializer
+    serializer_class = serializers.RegisterSerializer
 
     def get(self, request):
         return render(request, "signup.html")
@@ -30,7 +32,7 @@ class Signup(APIView):
 
 
 class Login(APIView):
-    serializer_class = LoginSerializer
+    serializer_class = serializers.LoginSerializer
 
     def get(self, request):
         return render(request, "login.html")
@@ -52,14 +54,14 @@ class Login(APIView):
 class Change(APIView):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
-        self.serializer = ProfileSerializer()
+        self.serializer = serializers.ProfileSerializer()
 
     def get(self, request):
         return render(request, "change.html", {"serializer": self.serializer})
 
     def post(self, request):
         token = request.COOKIES.get("jwt")
-        self.serializer = ProfileSerializer(request.user, data=request.data)
+        self.serializer = serializers.ProfileSerializer(request.user, data=request.data)
 
         if token:
             if self.serializer.is_valid():
@@ -79,7 +81,7 @@ class ChangeAddress(APIView):
     @staticmethod
     def post(request):
         request.data["customer"] = request.user.pk
-        serializer = AddressSerializer(data=request.data)
+        serializer = serializers.AddressSerializer(data=request.data)
         try:
             serializer.is_valid(raise_exception=True)
             serializer.save()
@@ -92,12 +94,12 @@ class ChangeAddress(APIView):
 class Otp(APIView):
     @staticmethod
     def get(request):
-        serializer = SendOtpSerializer
+        serializer = serializers.SendOtpSerializer
         return render(request, 'login_otp.html', {'serializer': serializer})
 
     @staticmethod
     def post(request):
-        serializer = SendOtpSerializer(data=request.data)
+        serializer = serializers.SendOtpSerializer(data=request.data)
         if serializer.is_valid():
             user = None
             mail_phone = serializer.validated_data.get('mail_phone')
@@ -128,12 +130,12 @@ class Otp(APIView):
 class Verification(APIView):
     @staticmethod
     def get(request):
-        serializer = VerificationSerializer()
+        serializer = serializers.VerificationSerializer()
         return render(request, "verification.html", {"serializer": serializer})
 
     @staticmethod
     def post(request):
-        serializer = VerificationSerializer(request.POST)
+        serializer = serializers.VerificationSerializer(request.POST)
         if serializer.is_valid:
             verification_code = serializer['verification_code'].value
             user_identifier = request.COOKIES.get('user_email_or_phone')

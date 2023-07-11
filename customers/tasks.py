@@ -1,6 +1,7 @@
+from random import randint
+
 from django.core.mail import send_mail
 from celery import shared_task
-from random import randint
 import redis
 
 redis_instance = redis.StrictRedis(host='localhost', port=6379, db=0)

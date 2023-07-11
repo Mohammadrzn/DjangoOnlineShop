@@ -1,9 +1,10 @@
-from .models import Order, Carts, CartItems, OrderItems
 from django.contrib.auth import get_user_model
-from product.models import Category, Product
 from django.utils.timezone import now
-from customers.models import Address
 from django.test import TestCase
+
+from .models import Order, Carts, CartItems, OrderItems
+from product.models import Category, Product
+from customers.models import Address
 
 
 class TestOrder(TestCase):

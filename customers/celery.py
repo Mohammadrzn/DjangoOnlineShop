@@ -1,6 +1,7 @@
+import os
+
 from django.conf import settings
 from celery import Celery
-import os
 
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'DjangoOnlineShop.settings')
 app = Celery('DjangoOnlineShop')

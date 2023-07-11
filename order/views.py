@@ -1,13 +1,14 @@
 from rest_framework.permissions import IsAuthenticated
 from django.shortcuts import get_object_or_404
 from rest_framework.response import Response
-from .serializers import OrderSerializer
 from django.shortcuts import render
+from rest_framework import generics
+from rest_framework import status
+
+from .serializers import OrderSerializer
 from .models import Order, OrderItems
 from customers.models import Address
-from rest_framework import generics
 from product.models import Product
-from rest_framework import status
 from product.cart import Cart
 
 

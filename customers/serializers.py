@@ -1,9 +1,9 @@
+from django.contrib.auth.password_validation import validate_password
 from rest_framework.exceptions import AuthenticationFailed
 from django.contrib.auth import authenticate
 from rest_framework import serializers
-from django.contrib.auth.password_validation import validate_password
+
 from .models import Customer, Address
-from jwt import decode
 
 
 class RegisterSerializer(serializers.ModelSerializer):
