@@ -32,8 +32,8 @@
             <div class="flex items-center justify-center">
                 <button class="px-2 text-lg bg-sky-500 hover:bg-sky-700 rounded-xl text-white">وارد شوید</button>
             </div>
-            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "api:signup" %}" class="hover:text-gray-600">ثبت نام کنید</a></p>
-            <p class="flex items-center justify-center"><a href="{% url 'api:otp' %}" class="hover:text-gray-600">ورود با رمز یک بار مصرف</a></p>
+            <p class="flex items-center justify-center">عضو نیستید؟ <a href="{% url "auth:signup" %}" class="hover:text-gray-600">ثبت نام کنید</a></p>
+            <p class="flex items-center justify-center"><a href="{% url 'auth:otp' %}" class="hover:text-gray-600">ورود با رمز یک بار مصرف</a></p>
         </form>
     </div>
     <script>

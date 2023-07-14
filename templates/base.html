@@ -80,14 +80,14 @@
         <div>
             <a href="{% url "home" %}" class="px-6 py-2 text-xl bg-red-500 rounded-full hover:bg-red-700">Digikal</a>
             {% if user.is_authenticated and not user.is_superuser %}
-                <a href="{% url "api:profile" %}"
+                <a href="{% url "auth:profile" %}"
                    class="px-6 py-3 text-lg bg-teal-500 text-white rounded-full">{{ user.username }}</a>
             {% else %}
-                <a href="{% url "api:login" %}"
+                <a href="{% url "auth:login" %}"
                    class="px-6 py-2 text-lg bg-teal-500 text-white rounded-full hover:bg-teal-700">ورود
                     / ثبت نام</a>
             {% endif %}
-            <a href="{% url "api:contact_us" %}"
+            <a href="{% url "auth:contact_us" %}"
                class="px-6 py-2 text-lg rounded-full bg-yellow-300 hover:bg-yellow-600">مشکلی
                 پیش آمده؟</a>
         </div>
