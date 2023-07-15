@@ -1,27 +1,24 @@
-import datetime
+# import datetime
 import re
 
-from rest_framework.exceptions import AuthenticationFailed
+# from rest_framework.exceptions import AuthenticationFailed
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.shortcuts import render, redirect
 from rest_framework.response import Response
 from rest_framework.views import APIView
 from rest_framework import status
 from django.db.models import Q
-from jwt import encode
-from .mixin import *
+# from jwt import encode
 import redis
 
 from .tasks import send_otp_email, send_otp_sms
-from .models import Customer, Address
+from .models import Customer
 from . import serializers
+from .mixin import *
 
 
 class Signup(APIView):
     serializer_class = serializers.RegisterSerializer
-
-    def get(self, request):
-        return render(request, "signup.html")
 
     def post(self, request):
         user = request.data
@@ -33,9 +30,6 @@ class Signup(APIView):
 
 class Login(APIView):
     serializer_class = serializers.LoginSerializer
-
-    def get(self, request):
-        return render(request, "login.html")
 
     def post(self, request):
         serializer = self.serializer_class(data=request.data)
@@ -56,9 +50,6 @@ class Change(APIView):
         super().__init__(**kwargs)
         self.serializer = serializers.ProfileSerializer()
 
-    def get(self, request):
-        return render(request, "change.html", {"serializer": self.serializer})
-
     def post(self, request):
         token = request.COOKIES.get("jwt")
         self.serializer = serializers.ProfileSerializer(request.user, data=request.data)
@@ -75,10 +66,6 @@ class Change(APIView):
 
 class ChangeAddress(APIView):
     @staticmethod
-    def get(request):
-        return render(request, "change_address.html")
-
-    @staticmethod
     def post(request):
         request.data["customer"] = request.user.pk
         serializer = serializers.AddressSerializer(data=request.data)
@@ -92,11 +79,6 @@ class ChangeAddress(APIView):
 
 
 class Otp(APIView):
-    @staticmethod
-    def get(request):
-        serializer = serializers.SendOtpSerializer
-        return render(request, 'login_otp.html', {'serializer': serializer})
-
     @staticmethod
     def post(request):
         serializer = serializers.SendOtpSerializer(data=request.data)
@@ -129,11 +111,6 @@ class Otp(APIView):
 
 class Verification(APIView):
     @staticmethod
-    def get(request):
-        serializer = serializers.VerificationSerializer()
-        return render(request, "verification.html", {"serializer": serializer})
-
-    @staticmethod
     def post(request):
         serializer = serializers.VerificationSerializer(request.POST)
         if serializer.is_valid:
@@ -154,54 +131,30 @@ class Verification(APIView):
         return render(request, "verification.html", {"serializer": serializer})
 
 
-def contact_us(request):
-    return render(request, "contact.html")
-
-
-def profile(request):
-    return render(request, "profile.html")
-
-
-def information(request):
-    return render(request, "information.html")
-
-
-def address(request):
-    address = Address.objects.values()
-    return render(request, "addresses.html", {"address": address})
-
-
-def logout(request):
-    url = reverse('home')
-    response = HttpResponseRedirect(url)
-    response.delete_cookie("jwt")
-    return response
-
-
-def authenticate(request):
-    username = request.data["username"]
-    password = request.data["password"]
-
-    user = Customer.objects.filter(username=username).first()
-
-    if user is None:
-        raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
-
-    if not user.check_password(password):
-        raise AuthenticationFailed("رمز اشتباه است")
-
-    payload = {
-        "id": user.id,
-        "exp": datetime.datetime.utcnow() + datetime.timedelta(days=10),
-        "iat": datetime.datetime.utcnow()
-    }
-
-    token = encode(payload, "secret", algorithm="HS256")
-
-    response = HttpResponseRedirect(reverse("auth:profile"))
-    response.set_cookie(key="jwt", value=token, httponly=True)
-    response.data = {
-        "message": "success"
-    }
-
-    return response
+# def authenticate(request):
+#     username = request.data["username"]
+#     password = request.data["password"]
+#
+#     user = Customer.objects.filter(username=username).first()
+#
+#     if user is None:
+#         raise AuthenticationFailed("کاربری با این مشخصات یافت نشد")
+#
+#     if not user.check_password(password):
+#         raise AuthenticationFailed("رمز اشتباه است")
+#
+#     payload = {
+#         "id": user.id,
+#         "exp": datetime.datetime.utcnow() + datetime.timedelta(days=10),
+#         "iat": datetime.datetime.utcnow()
+#     }
+#
+#     token = encode(payload, "secret", algorithm="HS256")
+#
+#     response = HttpResponseRedirect(reverse("auth:profile"))
+#     response.set_cookie(key="jwt", value=token, httponly=True)
+#     response.data = {
+#         "message": "success"
+#     }
+#
+#     return response
