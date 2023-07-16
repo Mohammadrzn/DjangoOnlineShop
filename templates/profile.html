@@ -22,7 +22,7 @@
         <div style="max-width: 265px" class="ml-10 float-child rounded-xl border border-red-500 p-2">
             <p class="py-4 text-center" style="font-size:20px">خوش آمدید {{ user.username }}</p>
             <hr class="h-px my-4 bg-yellow-500 border-0">
-            <span class="fa fa-user-o pl-2 mt-5"></span><a href="{% url 'api:information' %}" class="hover:text-gray-500" style="font-size:17px">مشاهده و
+            <span class="fa fa-user-o pl-2 mt-5"></span><a href="{% url 'auth:information' %}" class="hover:text-gray-500" style="font-size:17px">مشاهده و
                 تغییر
                 اطلاعات کاربری</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
@@ -32,9 +32,9 @@
             <hr class="h-px my-2 bg-gray-300 border-0">
             <span class="fa fa-comment-o pl-2"></span><a href="#" class="hover:text-gray-500" style="font-size:17px">دیدگاها</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
-            <span class="fa fa-building-o pl-2"></span><a href="{% url 'api:addresses' %}" class="hover:text-gray-500" style="font-size:17px">آدرس ها</a>
+            <span class="fa fa-building-o pl-2"></span><a href="{% url 'auth:addresses' %}" class="hover:text-gray-500" style="font-size:17px">آدرس ها</a>
             <hr class="h-px my-2 bg-gray-300 border-0">
-            <span class="fa fa-sign-out pl-2"></span><a href="{% url 'api:logout' %}" class="hover:text-gray-500" style="font-size:17px">خروج</a>
+            <span class="fa fa-sign-out pl-2"></span><a href="{% url 'auth:logout' %}" class="hover:text-gray-500" style="font-size:17px">خروج</a>
         </div>
         <div style="max-width: 1000px" class="float-child rounded-xl border border-red-500 p-5">
             <h1 class="mb-10">سفارش های من</h1>

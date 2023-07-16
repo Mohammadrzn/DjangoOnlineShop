@@ -48,7 +48,7 @@
                                                 aria-label="ادامه و پرداخت">ادامه و پرداخت
                                         </button>
                                     {% else %}
-                                        <p><a href="{% url 'api:login' %}?next={{ request.path }}"> برای نهایی کردن
+                                        <p><a href="{% url 'auth:login' %}?next={{ request.path }}"> برای نهایی کردن
                                             سفارش
                                             وارد حساب کاربری خود شوید.</a></p>
                                     {% endif %}
